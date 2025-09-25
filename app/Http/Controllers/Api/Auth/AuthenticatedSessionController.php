@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -39,6 +40,24 @@ class AuthenticatedSessionController extends Controller
         ]);
     }
 
+    public function refresh()
+    {
+        try {
+            $newToken = auth('api')->refresh();
+            return $this->respondWithToken($newToken);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Token refresh failed'], 401);
+        }
+    }
+
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type'   => 'bearer',
+            'expires_in'   => Auth::guard('api')->factory()->getTTL() * 60,
+        ]);
+    }
 
     public function me()
     {
@@ -50,4 +69,62 @@ class AuthenticatedSessionController extends Controller
         Auth::logout();
         return response()->json(['message' => 'Logged out']);
     }
+
+    public function loginAs(Request $request)
+    {
+        $admin = auth('api')->user();
+
+        if (!$admin || !$admin->hasRole('superadmin')) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        $userId = $request->input('user_id');
+        $user = \App\Models\User::find($userId);
+
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+
+        // Generate impersonation token
+        $ttl = config('jwt.ttl');
+        $impersonationToken = JWTAuth::fromUser($user, ['impersonated_by' => $admin->id]);
+
+        // Save admin’s current token so they can restore later
+        $adminToken = JWTAuth::fromUser($admin);
+
+        return response()->json([
+            'access_token'     => $impersonationToken,
+            'token_type'       => 'bearer',
+            'expires_in'       => $ttl * 60,
+            'user'             => $user,
+            'impersonated'     => true,
+            'impersonated_by'  => $admin->id,
+            'admin_token'      => $adminToken, // 🔹 store for restoring later
+        ]);
+    }
+
+    public function stopImpersonation(Request $request)
+    {
+        $adminToken = $request->input('admin_token');
+
+        try {
+            $payload = JWTAuth::setToken($adminToken)->getPayload();
+            $admin = \App\Models\User::find($payload['sub']);
+
+            if (!$admin) {
+                return response()->json(['error' => 'Admin not found'], 404);
+            }
+
+            return response()->json([
+                'access_token' => $adminToken,
+                'token_type'   => 'bearer',
+                'expires_in'   => Auth::guard('api')->factory()->getTTL() * 60,
+                'user'         => $admin,
+                'impersonated' => false
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to stop impersonation'], 401);
+        }
+    }
+
 }

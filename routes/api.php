@@ -24,6 +24,7 @@ Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthenticatedSessionController::class, 'login'])
         ->middleware('throttle:5,1'); // 5 requests per minute
     Route::post('/register', [AuthenticatedSessionController::class, 'register']);
+    Route::post('refresh', [AuthenticatedSessionController::class, 'refresh']);
 });
 
 // ------------------------
