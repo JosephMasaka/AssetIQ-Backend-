@@ -32,14 +32,14 @@ class UserTableSeeder extends Seeder
                 'updated_by'        => null,
             ]
         );
-        $superAdmin->assignRole('SuperAdmin');
+        $superAdmin->assignRole('superadmin');
 
         // --- Reseller ---
         $reseller = User::firstOrCreate(
-            ['username' => 'reseller1'],
+            ['username' => 'reseller'],
             [
                 'tenant_id'         => null,
-                'name'              => 'Primary Reseller',
+                'name'              => 'Demo Reseller',
                 'email'             => 'reseller@assetiq.com',
                 'email_verified_at' => $now,
                 'password'          => Hash::make('Reseller123!'),
@@ -53,18 +53,18 @@ class UserTableSeeder extends Seeder
                 'updated_by'        => 1,
             ]
         );
-        $reseller->assignRole('Reseller');
+        $reseller->assignRole('reseller');
 
         // --- Company Admin ---
         $companyAdmin = User::firstOrCreate(
-            ['username' => 'companyadmin'],
+            ['username' => 'Demo'],
             [
                 'tenant_id'         => 2, // example tenant/company
-                'name'              => 'CompanyAdmin',
+                'name'              => 'Demo Company',
                 'email'             => 'admin@company.com',
                 'email_verified_at' => $now,
                 'password'          => Hash::make('Company123!'),
-                'role' => 'companyadmin',
+                'role' => 'company',
                 'auth_provider'     => 'local',
                 'is_active'         => true,
                 'phone'             => '+254722222222',
@@ -74,6 +74,6 @@ class UserTableSeeder extends Seeder
                 'updated_by'        => 1,
             ]
         );
-        $companyAdmin->assignRole('CompanyAdmin');
+        $companyAdmin->assignRole('company');
     }
 }

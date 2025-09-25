@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('tenant_id')->nullable()->comment('MANDT - Client/Tenant/Company reference');
 
             // Basic User Info
-            $table->string('username')->unique()->comment('BNAME - User Login ID');
+            $table->string('username')->unique()->comment('BNAME - User Login ID')->nullable();
             $table->string('name')->comment('Full Name');
             $table->string('email')->unique()->comment('SAP: SMTP_ADDR');
             $table->timestamp('email_verified_at')->nullable();

@@ -15,13 +15,26 @@ class ResellerController extends Controller
     {
         $user = auth('api')->user();
 
-        if ($user && $user->can('reseller:manage') || $user->role === 'superadmin') {
-            // fetch all users with reseller role
-            $resellers = User::where('role','reseller')->get();
+        // safety: if no user, deny
+        if (!$user) {
+            return $this->errorResponse('Unauthenticated', 401);
+        }
+
+        // ✅ Instead of Spatie `can()` or `hasRole()`, check via DB or fallback
+        $isSuperAdmin = $user->roles()->where('name', 'superadmin')->exists();
+        $canManage    = $user->roles()->whereHas('permissions', function ($q) {
+            $q->where('name', 'reseller:manage');
+        })->exists();
+
+        if ($isSuperAdmin || $canManage) {
+            // fetch all users with reseller role safely
+            $resellers = User::whereHas('roles', function ($q) {
+                $q->where('name', 'reseller');
+            })->get();
 
             return $this->successResponse($resellers, 'Resellers retrieved successfully');
-        } else {
-            return $this->errorResponse('Permission Denied', 403);
         }
+
+        return $this->errorResponse('Permission Denied', 403);
     }
 }

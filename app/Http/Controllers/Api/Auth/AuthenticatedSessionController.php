@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Log;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -24,6 +25,15 @@ class AuthenticatedSessionController extends Controller
         }
 
         $user = auth('api')->user();
+        // $permissions = $user->getAllPermissions()->pluck('name') ?? collect();
+        $permissions = $user->roles()
+            ->with('permissions')
+            ->get()
+            ->pluck('permissions')
+            ->flatten()
+            ->pluck('name')
+            ->unique()
+            ->values();
 
         // Check if user is active
         if (!$user->is_active || $user->is_active === 0) {
@@ -37,6 +47,7 @@ class AuthenticatedSessionController extends Controller
             'token_type'   => 'bearer',
             'expires_in'   => $ttl * 60, // in seconds
             'user'         => $user,
+            'permissions' => $permissions,
         ]);
     }
 
@@ -73,9 +84,9 @@ class AuthenticatedSessionController extends Controller
     public function loginAs(Request $request)
     {
         $admin = auth('api')->user();
-
+        Log::info($admin);
         if (!$admin || !$admin->hasRole('superadmin')) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+            return response()->json(['error' => 'Permission Denied'], 403);
         }
 
         $userId = $request->input('user_id');
@@ -84,6 +95,15 @@ class AuthenticatedSessionController extends Controller
         if (!$user) {
             return response()->json(['error' => 'User not found'], 404);
         }
+
+        $permissions = $user->roles()
+            ->with('permissions')
+            ->get()
+            ->pluck('permissions')
+            ->flatten()
+            ->pluck('name')
+            ->unique()
+            ->values();
 
         // Generate impersonation token
         $ttl = config('jwt.ttl');
@@ -100,6 +120,7 @@ class AuthenticatedSessionController extends Controller
             'impersonated'     => true,
             'impersonated_by'  => $admin->id,
             'admin_token'      => $adminToken, // 🔹 store for restoring later
+            'permissions' => $permissions
         ]);
     }
 
@@ -109,18 +130,20 @@ class AuthenticatedSessionController extends Controller
 
         try {
             $payload = JWTAuth::setToken($adminToken)->getPayload();
-            $admin = \App\Models\User::find($payload['sub']);
+            $admin = User::find($payload['sub']);
 
             if (!$admin) {
                 return response()->json(['error' => 'Admin not found'], 404);
             }
+            // $permissions = $admin->getAllPermissions()->pluck('name') ?? collect();
 
             return response()->json([
                 'access_token' => $adminToken,
                 'token_type'   => 'bearer',
                 'expires_in'   => Auth::guard('api')->factory()->getTTL() * 60,
                 'user'         => $admin,
-                'impersonated' => false
+                'impersonated' => false,
+                // 'permissions' => $permissions
             ]);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to stop impersonation'], 401);

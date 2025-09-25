@@ -27,6 +27,7 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'auth_provider',
         'is_active',
+        'role',
         'role_id',
         'permissions',
         'phone',
@@ -34,6 +35,8 @@ class User extends Authenticatable implements JWTSubject
         'department',
         'google_id',
     ];
+
+    protected $guard_name = 'api';
 
     /**
      * The attributes that should be hidden for serialization.
@@ -66,8 +69,10 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [
-            'role' => $this->role,
+            'roles' => $this->getRoleNames(),  // ✅ correct
+            // 'permissions' => $this->getAllPermissions()->pluck('name'), // optional
             'tenant_id' => $this->tenant_id,
         ];
     }
+
 }

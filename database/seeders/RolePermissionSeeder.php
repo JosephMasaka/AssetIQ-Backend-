@@ -39,16 +39,48 @@ class RolePermissionSeeder extends Seeder
 
             // Reports
             'report:view',
+
+            //Plans
+            'plans:manage',
+            'plans:create',
+            'plans:edit',
+            'plans:update',
+            'plans:delete',
+
+            //Plans Request
+            'plan request:manage',
+            'plan request:create',
+            'plan request Request Request:edit',
+            'plan request Request:update',
+            'plan request:delete',
+
+            //Order
+            'order:manage',
+            'order:create',
+            'order:edit',
+            'order:update',
+            'order:delete',
+
+            //Order
+            'tenant:manage',
+            'tenant:create',
+            'tenant:edit',
+            'tenant:update',
+            'tenant:delete',
+
         ];
 
         // --- Group Permissions per Role ---
         $superAdminPermissions = $permissions; // Full set
 
         $resellerPermissions = [
-            'reseller:manage',
+            // 'reseller:manage',
             'tenant:create',
             'tenant:manage',
             'user:create',
+            'order:manage',
+            'plans:manage',
+            'plan request:manage',
         ];
 
         $companyPermissions = [
@@ -60,17 +92,19 @@ class RolePermissionSeeder extends Seeder
             'asset:manage',
             'asset:create',
             'report:view',
+            'plans:manage',
+            'plan request:manage',
         ];
 
         // --- Create Permissions if Missing ---
         foreach ($permissions as $perm) {
-            Permission::firstOrCreate(['name' => $perm]);
+            Permission::firstOrCreate(['name' => $perm, 'guard_name' => 'api']);
         }
 
         // --- Define Roles ---
-        $superAdmin = Role::firstOrCreate(['name' => 'SuperAdmin']);
-        $reseller   = Role::firstOrCreate(['name' => 'Reseller']);
-        $company    = Role::firstOrCreate(['name' => 'CompanyAdmin']);
+        $superAdmin = Role::firstOrCreate(['name' => 'superadmin', 'guard_name' => 'api']);
+        $reseller   = Role::firstOrCreate(['name' => 'reseller', 'guard_name' => 'api']);
+        $company    = Role::firstOrCreate(['name' => 'company', 'guard_name' => 'api']);
 
         // --- Assign Permissions ---
         $superAdmin->syncPermissions($superAdminPermissions);
