@@ -84,18 +84,28 @@ class AuthenticatedSessionController extends Controller
     public function loginAs(Request $request)
     {
         $admin = auth('api')->user();
-        Log::info($admin);
-        if (!$admin || !$admin->hasRole('superadmin')) {
-            return response()->json(['error' => 'Permission Denied'], 403);
+
+        if (!$admin) {
+            return response()->json(['error' => 'Not authenticated'], 401);
         }
 
         $userId = $request->input('user_id');
-        $user = \App\Models\User::find($userId);
+        $user = User::find($userId);
 
         if (!$user) {
             return response()->json(['error' => 'User not found'], 404);
         }
 
+        // 🔹 Role-based impersonation rules
+        if ($admin->hasRole('superadmin') && !$user->hasRole('reseller')) {
+            return response()->json(['error' => 'Superadmin can only impersonate resellers'], 403);
+        }
+
+        if ($admin->hasRole('reseller') && !$user->hasRole('company')) {
+            return response()->json(['error' => 'Reseller can only impersonate companies'], 403);
+        }
+
+        // collect target user's permissions
         $permissions = $user->roles()
             ->with('permissions')
             ->get()
@@ -105,22 +115,23 @@ class AuthenticatedSessionController extends Controller
             ->unique()
             ->values();
 
-        // Generate impersonation token
         $ttl = config('jwt.ttl');
+
+        // Impersonation token for target user
         $impersonationToken = JWTAuth::fromUser($user, ['impersonated_by' => $admin->id]);
 
-        // Save admin’s current token so they can restore later
+        // Save current admin token for restore
         $adminToken = JWTAuth::fromUser($admin);
 
         return response()->json([
-            'access_token'     => $impersonationToken,
-            'token_type'       => 'bearer',
-            'expires_in'       => $ttl * 60,
-            'user'             => $user,
-            'impersonated'     => true,
-            'impersonated_by'  => $admin->id,
-            'admin_token'      => $adminToken, // 🔹 store for restoring later
-            'permissions' => $permissions
+            'access_token'    => $impersonationToken,
+            'token_type'      => 'bearer',
+            'expires_in'      => $ttl * 60,
+            'user'            => $user,
+            'impersonated'    => true,
+            'impersonated_by' => $admin->id,
+            'admin_token'     => $adminToken,
+            'permissions'     => $permissions
         ]);
     }
 
