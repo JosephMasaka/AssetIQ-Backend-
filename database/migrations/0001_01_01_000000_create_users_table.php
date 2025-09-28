@@ -25,6 +25,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('google_id')->unique()->nullable();
             $table->string('role');
+            $table->string('avatar')->nullable();
 
             // Security / Authentication
             $table->string('password')->comment('PASSCODE - Password Hash');

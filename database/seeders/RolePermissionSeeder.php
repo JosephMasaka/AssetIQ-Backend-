@@ -26,6 +26,13 @@ class RolePermissionSeeder extends Seeder
             'tenant:update',
             'tenant:delete',
 
+            //Company
+            'company:manage',
+            'company:create',
+            'company:edit',
+            'company:update',
+            'company:delete',
+
             // User
             'user:manage',
             'user:create',
@@ -54,6 +61,13 @@ class RolePermissionSeeder extends Seeder
             'plan request Request:update',
             'plan request:delete',
 
+            //Coupon
+            'coupon:manage',
+            'coupon:create',
+            'coupon:edit',
+            'coupon:update',
+            'coupon:delete',
+
             //Order
             'order:manage',
             'order:create',
@@ -68,32 +82,126 @@ class RolePermissionSeeder extends Seeder
             'tenant:update',
             'tenant:delete',
 
+            //Administration
+            'administration:manage',
+            'activity logs:manage',
+
         ];
 
         // --- Group Permissions per Role ---
-        $superAdminPermissions = $permissions; // Full set
+        $superAdminPermissions = [
+            // Reseller
+            'reseller:manage',
+            'reseller:create',
+            'reseller:edit',
+            'reseller:update',
+            'reseller:delete',
+
+            // Tenant
+            'tenant:manage',
+            'tenant:create',
+            'tenant:edit',
+            'tenant:update',
+            'tenant:delete',
+
+            //Plans
+            'plans:manage',
+            'plans:create',
+            'plans:edit',
+            'plans:update',
+            'plans:delete',
+
+            //Plans Request
+            'plan request:manage',
+            'plan request:create',
+            'plan request Request Request:edit',
+            'plan request Request:update',
+            'plan request:delete',
+
+            //Coupon
+            'coupon:manage',
+            'coupon:create',
+            'coupon:edit',
+            'coupon:update',
+            'coupon:delete',
+
+            //Order
+            'order:manage',
+            'order:create',
+            'order:edit',
+            'order:update',
+            'order:delete',
+
+            //Tenant
+            'tenant:manage',
+            'tenant:create',
+            'tenant:edit',
+            'tenant:update',
+            'tenant:delete',
+
+            //Administration
+            'administration:manage',
+            'activity logs:manage',
+
+        ];
 
         $resellerPermissions = [
             // 'reseller:manage',
-            'tenant:create',
-            'tenant:manage',
+            // 'tenant:create',
+            // 'tenant:manage',
+
+            //Company
+            'company:manage',
+            'company:create',
+            'company:edit',
+            'company:update',
+            // 'company:delete',
+
+            //User
             'user:create',
+
+            //Coupon
+            'coupon:manage',
+
+            //Order
             'order:manage',
+
+            //Plans
             'plans:manage',
+
+            //Plan request
             'plan request:manage',
+
+            //Admin
+            'administration:manage',
+            'activity logs:manage',
+
         ];
 
         $companyPermissions = [
+            //User
             'user:manage',
             'user:create',
             'user:edit',
             'user:update',
             'user:delete',
+
+            //Asset
             'asset:manage',
             'asset:create',
+
+            //Reports
             'report:view',
+
+            //Plans
             'plans:manage',
+
+            //Plan Request
             'plan request:manage',
+
+            //Admin
+            'administration:manage',
+            'activity logs:manage',
         ];
 
         // --- Create Permissions if Missing ---
