@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Api\ResellerController; // ✅ add this
+use App\Http\Controllers\Api\ResellerController; 
+use App\Http\Controllers\Api\CompanyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +25,7 @@ Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthenticatedSessionController::class, 'login'])
         ->middleware('throttle:5,1'); // 5 requests per minute
     Route::post('/register', [AuthenticatedSessionController::class, 'register']);
-    Route::post('refresh', [AuthenticatedSessionController::class, 'refresh']);
+    Route::post('/refresh', [AuthenticatedSessionController::class, 'refresh']);
     Route::post('/login-as', [AuthenticatedSessionController::class, 'loginAs']);
 });
 
@@ -37,4 +38,13 @@ Route::middleware('auth:api')->group(function () {
 
     // ✅ Reseller route
     Route::get('/resellers', [ResellerController::class, 'getResellers']);
+    Route::post('/reseller/create', [ResellerController::class, 'createReseller']);
+    Route::put('/reseller/update', [ResellerController::class, 'updateReseller']);
+    Route::delete('/reseller/delete', [ResellerController::class, 'deleteReseller']);
+
+    // ✅ Company route
+    Route::get('/companies', [CompanyController::class, 'getCompanies']);
+    Route::post('/company/create', [CompanyController::class, 'createCompany']);
+    Route::put('/company/update', [CompanyController::class, 'updateCompany']);
+    Route::delete('/company/delete', [CompanyController::class, 'deleteCompany']);
 });
