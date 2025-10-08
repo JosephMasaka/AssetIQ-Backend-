@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Traits\ApiResponser;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Log;
 
 class ResellerController extends Controller
 {
@@ -19,7 +20,7 @@ class ResellerController extends Controller
     public function getResellers()
     {
         $user = auth('api')->user();
-
+        Log::info($user);
         if (!$user) {
             return $this->errorResponse('Unauthenticated', 401);
         }
@@ -32,12 +33,15 @@ class ResellerController extends Controller
         if ($isSuperAdmin || $canManage) {
             $resellers = User::whereHas('roles', function ($q) {
                 $q->where('name', 'reseller');
-            })->get();
+                // $q->where('created_by', $user->id);
+            })
+             ->where('created_by', $user->id)
+            ->get();
 
             return $this->successResponse($resellers, 'Resellers retrieved successfully');
+        }else{
+            return $this->errorResponse('Permission Denied', 403);
         }
-
-        return $this->errorResponse('Permission Denied', 403);
     }
 
     /**
