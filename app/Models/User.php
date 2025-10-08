@@ -35,6 +35,7 @@ class User extends Authenticatable implements JWTSubject
         'job_title',
         'department',
         'google_id',
+        'created_by'
     ];
 
     protected $guard_name = 'api';
@@ -74,6 +75,19 @@ class User extends Authenticatable implements JWTSubject
             // 'permissions' => $this->getAllPermissions()->pluck('name'), // optional
             'tenant_id' => $this->tenant_id,
         ];
+    }
+
+    public function getCompany() 
+    {
+        $user = auth('api')->user();
+
+        if($user->role === 'company'){
+            $companyID = $user->id;
+        }else{
+            $companyID = $user->created_by;
+        }
+
+        return $companyID;
     }
 
 }
