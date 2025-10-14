@@ -7,9 +7,11 @@ use App\Models\Asset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 use Exception;
 use App\Traits\ApiResponser;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class AssetController extends Controller
 {
@@ -56,7 +58,7 @@ class AssetController extends Controller
         // Check permissions
         // $isCompanyAdmin = $user->roles()->where('name', 'company')->exists();
         $canManage = $user->roles()->whereHas('permissions', function ($q) {
-            $q->where('name', 'asset category:manage');
+            $q->where('name', 'asset:manage');
         })->exists();
 
         if (!$canManage) {
@@ -66,6 +68,7 @@ class AssetController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
+                'asset_img' => 'nullable|nullable|file|mimes:jpg,jpeg,png|max:2048',
                 'asset_code' => 'required|string|max:255|unique:assets,asset_code',
                 'description' => 'nullable|string',
                 'category_id' => 'required|integer|exists:asset_categories,id',
@@ -85,9 +88,41 @@ class AssetController extends Controller
                 ], 422);
             }
             Log::info($user->getCompany());
+
+            // ✅ Handle image upload - Remove spaces completely
+            // if ($request->hasFile('asset_img')) {
+            //     $image = $request->file('asset_img');
+                
+            //     // Remove ALL spaces and special characters from filename
+            //     $originalName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            //     $extension = $image->getClientOriginalExtension();
+                
+            //     // Clean the filename - replace spaces with underscores and remove special chars
+            //     $cleanName = preg_replace('/[^a-zA-Z0-9_-]/', '_', $originalName);
+            //     $imageName = time() . '_' . $cleanName . '.' . $extension;
+                
+            //     // Store in public storage
+            //     $image->storeAs('assets', $imageName, 'public');
+                
+            //     // Generate URL
+            //     $imagePath = Storage::disk('public')->url('assets/' . $imageName);
+            // }
+
+            if ($request->hasFile('asset_img')) {
+                $image = $request->file('asset_img');
+                $path = public_path('assets/assets');
+                if (!file_exists($path)) {
+                    mkdir($path, 0777, true);
+                }
+                $fileName = Str::random(20) . '.' . $image->getClientOriginalExtension();
+                $image->move($path, $fileName);
+                $imagePath = url("assets/assets/{$fileName}");
+            }
+
             $asset = Asset::create([
                 'asset_code' => $request->asset_code,
                 'name' => $request->name,
+                'asset_img' => $imagePath,
                 'description' => $request->description,
                 'category_id' => $request->category_id ?? 1, // default category if none
                 'serial_number' => $request->serial_number,

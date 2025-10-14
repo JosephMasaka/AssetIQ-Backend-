@@ -9,7 +9,9 @@ class AssetAttribute extends Model
     protected $fillable = [
         'asset_id', 
         'key', 
-        'value'
+        'value',
+        'company_id',
+        'created_by',
     ];
 
     public function asset() {

@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class RequisitionItem extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'requisition_id',
+        'item_description',
+        'quantity',
+        'uom_id',
+        'estimated_cost',
+        'company_id',
+        'created_by',
+        'changed_by'
+    ];
+
+    public function requisition()
+    {
+        return $this->belongsTo(Requisition::class);
+    }
+}

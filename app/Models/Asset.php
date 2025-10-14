@@ -9,6 +9,7 @@ class Asset extends Model
     protected $fillable = [
         'asset_code', 
         'name', 
+        'asset_img',
         'description', 
         'category_id',
         'serial_number', 
@@ -35,6 +36,36 @@ class Asset extends Model
 
     public function codes() {
         return $this->hasMany(AssetCode::class);
+    }
+
+    public function licenses()
+    {
+        return $this->hasMany(License::class, 'asset_id');
+    }
+
+    public function components()
+    {
+        return $this->hasMany(Component::class, 'asset_id');
+    }
+
+    public function files()
+    {
+        return $this->hasMany(AssetFile::class, 'asset_id');
+    }
+
+    public function maintenances()
+    {
+        return $this->hasMany(Maintenance::class, 'asset_id');
+    }
+
+    public function histories()
+    {
+        return $this->hasMany(AssetHistory::class, 'asset_id');
+    }
+
+    public function checkinsCheckouts()
+    {
+        return $this->hasMany(AssetCheckinCheckout::class, 'asset_id');
     }
 }
 

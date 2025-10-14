@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class AssetMaintenance extends Model
+class Maintenance extends Model
 {
     use HasFactory;
 
-    protected $table = 'maintenance';
+    protected $table = 'maintenances';
 
     protected $fillable = [
         'asset_id',

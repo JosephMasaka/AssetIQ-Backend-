@@ -17,6 +17,8 @@ return new class extends Migration {
             $table->string('assigned_to')->nullable(); // employee, dept, or location
             $table->string('purpose')->nullable();
             $table->enum('status', ['checked_out', 'checked_in'])->default('checked_out');
+            $table->integer('company_id');
+            $table->integer('created_by');
             $table->timestamps();
         });
     }

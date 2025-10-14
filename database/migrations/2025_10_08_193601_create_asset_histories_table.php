@@ -13,6 +13,8 @@ return new class extends Migration {
             $table->string('action'); // created, updated, transferred, disposed, etc.
             $table->text('details')->nullable();
             $table->foreignId('performed_by')->constrained('users')->cascadeOnDelete();
+            $table->integer('company_id');
+            $table->integer('created_by');
             $table->timestamps();
         });
     }

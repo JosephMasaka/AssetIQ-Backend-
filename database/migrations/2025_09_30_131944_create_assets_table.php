@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('asset_code')->unique(); // SAP-style number range
             $table->string('name');
+            $table->string('asset_img')->nullable();
             $table->text('description')->nullable();
             $table->foreignId('category_id')->constrained('asset_categories')->onDelete('cascade');
             $table->string('serial_number')->nullable();
