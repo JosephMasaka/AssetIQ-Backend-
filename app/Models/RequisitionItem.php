@@ -24,4 +24,9 @@ class RequisitionItem extends Model
     {
         return $this->belongsTo(Requisition::class);
     }
+
+    public function unitOfMeasure()
+    {
+        return $this->belongsTo(UnitOfMeasure::class, 'uom_id', 'uom_id');
+    }
 }

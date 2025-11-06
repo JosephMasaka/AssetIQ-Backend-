@@ -11,9 +11,10 @@ class Vendor extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'vendor_id';
     public $incrementing = true;
     protected $keyType = 'int';
+
+    protected $table = 'vendors';
 
     protected $fillable = [
         'vendor_code',
@@ -97,6 +98,13 @@ class Vendor extends Model
     public function modifier()
     {
         return $this->belongsTo(User::class, 'changed_by');
+    }
+
+    public function requisitions()
+    {
+        return $this->belongsToMany(Requisition::class, 'requisition_vendors', 'vendor_id', 'requisition_id')
+            ->withPivot(['rfq_number', 'rfq_date', 'response_deadline', 'quoted_amount', 'status', 'remarks'])
+            ->withTimestamps();
     }
 
     // Scopes

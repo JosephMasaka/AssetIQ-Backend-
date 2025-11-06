@@ -117,6 +117,16 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/requisitions/', [RequisitionController::class, 'index']);
     Route::get('/requisitions/{id}', [RequisitionController::class, 'show']);
     Route::post('/requisition/create', [RequisitionController::class, 'store']);
+    Route::post('/requisitions/add-vendors', [RequisitionController::class, 'addVendors']);
+    Route::get('/requisitions/vendors/{id}', [RequisitionController::class, 'getVendors']);
+    Route::get('/requisitions/vendor/{id}/{vendorId}', [RequisitionController::class, 'getVendor']);
+    Route::get('/requisitions/requisition/items/{id}', [RequisitionController::class, 'getRequisitionItems']);
+    Route::get('/requisitions/requisition/request-for-quotation/generate/{id}/{vendorId}', [RequisitionController::class, 'generateRFQLinks']);
+    Route::get(
+        'requisitions/requisition/{id}/rfqs',
+        [RequisitionController::class, 'getRequisitionRFQs']
+    );
+
 
     //Unit of Measure
     Route::get('/unit-of-measure/', [UoMController::class, 'index']);

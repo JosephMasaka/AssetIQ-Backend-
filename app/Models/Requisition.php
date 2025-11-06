@@ -43,4 +43,12 @@ class Requisition extends Model
     {
         return $this->belongsTo(RequisitionType::class, 'requisition_type_id');
     }
+
+    public function vendors()
+    {
+        return $this->belongsToMany(Vendor::class, 'requisition_vendors', 'requisition_id', 'vendor_id')
+            ->withPivot(['rfq_number', 'rfq_date', 'response_deadline', 'quoted_amount', 'status', 'remarks'])
+            ->withTimestamps();
+    }
+
 }
