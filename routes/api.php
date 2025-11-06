@@ -47,7 +47,8 @@ Route::prefix('auth')->group(function () {
 // Protected Auth Routes (JWT middleware)
 // ------------------------
 Route::middleware('auth:api')->group(function () {
-    Route::post('/logout', [AuthenticatedSessionController::class, 'logout']);
+    Route::post('auth/logout', [AuthenticatedSessionController::class, 'logout']);
+    Route::post('auth/stop-impersonation', [AuthenticatedSessionController::class, 'logout']);
     // Route::get('/check', [AuthController::class, 'checkAuthenticated']);
 
     // ✅ Reseller route

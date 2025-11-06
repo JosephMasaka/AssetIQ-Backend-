@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Requisition;
+use App\Models\RequisitionItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\ApiResponser;
+use Illuminate\Support\Facades\DB;
 
 class RequisitionController extends Controller
 {
@@ -77,7 +79,7 @@ class RequisitionController extends Controller
         //     'message' => 'Requisition fetched successfully',
         //     'data' => $requisition
         // ]);
-        return $this->successResponse('Requisition fetched successfully', 200);
+        return $this->successResponse($requisition, 'Requisition fetched successfully');
     }
 
      /**
@@ -98,10 +100,10 @@ class RequisitionController extends Controller
         if (!$canCreate) {
             return $this->errorResponse('Permission Denied', 403);
         }
-
+        DB::beginTransaction();
         $validated = $request->validate([
             'justification' => 'required|string|max:255',
-            'type' => 'required|string|in:Maintenance,Material,Service',
+            'type' => 'required',
             'items' => 'required|array|min:1',
             'items.*.description' => 'required|string|max:255',
             'items.*.quantity' => 'required|numeric|min:1',
@@ -115,8 +117,9 @@ class RequisitionController extends Controller
                 'requested_by' => $user->id,
                 'request_date' => now(),
                 'status' => 'Pending',
+                'requisition_type_id' => $validated['type'],
                 'justification' => $validated['justification'],
-                'company_id' => $user->company_id ?? null,
+                'company_id' => $user->getCompany(),
                 'created_by' => $user->id,
             ]);
 
@@ -124,12 +127,14 @@ class RequisitionController extends Controller
                 $requisition->items()->create([
                     'description' => $item['description'],
                     'quantity' => $item['quantity'],
-                    'uom_id' => $item['uom_id'],
-                    'estimated_unit_cost' => $item['estimated_unit_cost'] ?? 0,
-                    'total_cost' => $item['quantity'] * ($item['estimated_unit_cost'] ?? 0),
+                    'uom_id' => $item['uom'], // only if uom_id exists
+                    'estimated_cost' => $item['estimated_unit_cost'] ?? 0,
+                    'company_id' => $user->getCompany(),
+                    'created_by' => $user->id,
+                    // 'changed_by' => $user->id,
                 ]);
             }
-
+            DB::commit();
             return $this->successResponse($requisition->load('items'), 'Requisition created successfully');
         } catch (\Exception $e) {
             return $this->errorResponse('Failed to create requisition: ' . $e->getMessage(), 500);

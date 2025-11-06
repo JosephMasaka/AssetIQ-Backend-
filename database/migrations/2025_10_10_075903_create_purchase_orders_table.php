@@ -26,7 +26,7 @@ return new class extends Migration
             $table->foreign('created_by')->references('id')->on('users');
             $table->foreign('requisition_id')->references('id')->on('requisitions');
 
-            $table->unsignedBigInteger('created_by');
+            // $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('company_id');
         });
