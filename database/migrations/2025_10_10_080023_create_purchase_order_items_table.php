@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('po_id'); //Puchase Order ID
             $table->unsignedBigInteger('requisition_item_id')->nullable();
             $table->string('material_code')->nullable();
+            $table->string('name')->nullable();
             $table->string('description');
             $table->integer('quantity');
             $table->decimal('unit_price', 15, 2);
