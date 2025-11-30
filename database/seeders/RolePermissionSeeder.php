@@ -156,6 +156,24 @@ class RolePermissionSeeder extends Seeder
 
             // Procurement Module
             'procurement:manage',
+
+            //Finance
+            'finance:manage',
+
+            'gl accounts:manage',
+            'gl accounts:create',
+            'gl accounts:update',
+            'gl accounts:delete',
+
+            'depreciation rules:manage',
+            'depreciation rules:create',
+            'depreciation rules:update',
+            'depreciation rules:delete',
+
+            'account groups:manage',
+            'account groups groups:create',
+            'account groups:update',
+            'account groups:delete',
             
             // Reports
             'report:view',
@@ -406,6 +424,24 @@ class RolePermissionSeeder extends Seeder
             'purchase order:edit',
             'purchase order:update',
             'purchase order:delete',
+
+            //Finance
+            'finance:manage',
+
+            'gl accounts:manage',
+            'gl accounts:create',
+            'gl accounts:update',
+            'gl accounts:delete',
+
+            'depreciation rules:manage',
+            'depreciation rules:create',
+            'depreciation rules:update',
+            'depreciation rules:delete',
+
+            'account groups:manage',
+            'account groups groups:create',
+            'account groups:update',
+            'account groups:delete',
 
             //Reports
             'report:view',
