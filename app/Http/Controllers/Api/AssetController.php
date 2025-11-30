@@ -39,7 +39,7 @@ class AssetController extends Controller
             return $this->errorResponse('Permission Denied', 403);
         }
 
-        $assets = Asset::with('category')->latest()->get();
+        $assets = Asset::with('category')->where('company_id', $user->getCompany())->latest()->get();
 
         return $this->successResponse($assets, 'assets retrieved successfully');
     }
