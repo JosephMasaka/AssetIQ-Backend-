@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('requisition_id');
             $table->string('material_code')->nullable(); // SAP MM equivalent
+            $table->string('name')->nullable();
             $table->string('description');
             $table->unsignedBigInteger('uom_id');
             // ->references('uom_id')->on('units_of_measure')->onDelete('restrict'); // Unit of Measure
