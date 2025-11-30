@@ -17,7 +17,16 @@ use App\Http\Controllers\Api\AssetHistoryController;
 use App\Http\Controllers\Api\RequisitionController;
 use App\Http\Controllers\Api\RequisitionTypeController;
 use App\Http\Controllers\Api\UoMController;
-
+use App\Http\Controllers\Api\QuotationController;
+use App\Http\Controllers\Api\QuotationComparisonController;
+use App\Http\Controllers\Api\PurchaseOrderController;
+use App\Http\Controllers\Api\GoodsReceiptController;
+use App\Http\Controllers\Api\InvoiceController;
+use App\Http\Controllers\Api\DepreciationRuleController;
+use App\Http\Controllers\Api\GLAccountController;
+use App\Http\Controllers\Api\AccountGroupController;
+use App\Http\Controllers\Api\CountryController;
+use App\Http\Controllers\Api\TaxCodeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -126,6 +135,7 @@ Route::middleware('auth:api')->group(function () {
         'requisitions/requisition/{id}/rfqs',
         [RequisitionController::class, 'getRequisitionRFQs']
     );
+    Route::post('/requisitions/{id}/compare-quotations', [QuotationComparisonController::class, 'compare']);
 
 
     //Unit of Measure
@@ -137,4 +147,47 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/requisition-types/', [RequisitionTypeController::class, 'index']);
     Route::get('/requisition-type/{id}', [RequisitionTypeController::class, 'show']);
     Route::post('/requisition-type/create', [RequisitionTypeController::class, 'store']);
+
+    //Quotations
+    Route::get('/quotations/', [QuotationController::class, 'index']);
+    Route::get('/quotation/show/{id}', [QuotationController::class, 'show']);
+    Route::post('/quotation/{quotation}/award', [QuotationController::class, 'awardQuotation']);
+
+    //Purchase Order
+    Route::get('/purchase-orders/', [PurchaseOrderController::class, 'index']);
+    Route::get('/purchase-order/show/{id}', [PurchaseOrderController::class, 'show']);
+
+    //Goods Reciept
+    Route::get('/goods-receipts/', [GoodsReceiptController::class, 'index']);
+    Route::post('/goods-receipt/', [GoodsReceiptController::class, 'store']);
+    Route::get('/goods-receipt/{id}', [GoodsReceiptController::class, 'show']);
+
+    //Invoices
+    Route::post('invoices/generate-from-gr/{id}', [InvoiceController::class, 'generateFromGR']);
+    Route::get('invoices/', [InvoiceController::class, 'index']);
+    Route::get('invoice/{id}', [InvoiceController::class, 'show']);
+
+    //Depreciation Rules
+    Route::get('/depreciation-rules', [DepreciationRuleController::class, 'index']);
+    Route::post('/depreciation-rules', [DepreciationRuleController::class, 'store']);
+    Route::put('/depreciation-rules/{id}', [DepreciationRuleController::class, 'update']);
+    Route::delete('/depreciation-rules/{id}', [DepreciationRuleController::class, 'destroy']);
+
+    Route::prefix('gl-mapping')->group(function () {
+        Route::get('/gl-accounts', [GLAccountController::class, 'index']);
+        Route::post('/gl-accounts/create', [GLAccountController::class, 'store']);
+    });
+
+    //Account Groups
+    Route::get('/account-groups', [AccountGroupController::class, 'index']);
+    Route::post('/account-group/create', [AccountGroupController::class, 'store']);
+
+    //Tax Codes
+    Route::get('/tax-codes', [TaxCodeController::class, 'index']);
+    Route::post('/tax-codes/create', [TaxCodeController::class, 'store']);
+
+    //COuntries
+    Route::get('/countries', [CountryController::class, 'index']);
 });
+
+Route::post('/public/quotations/{public_token}', [QuotationController::class, 'store']);
