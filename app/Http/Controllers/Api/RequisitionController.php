@@ -105,13 +105,14 @@ class RequisitionController extends Controller
         }
         DB::beginTransaction();
         $validated = $request->validate([
-            'justification' => 'required|string|max:255',
+            'justification' => 'required|string',
             'type' => 'required',
             'items' => 'required|array|min:1',
-            'items.*.description' => 'required|string|max:255',
+            'items.*.description' => 'required|string',
             'items.*.quantity' => 'required|numeric|min:1',
             'items.*.uom' => 'required|string|max:20',
-            'items.*.estimated_unit_cost' => 'nullable|numeric|min:0'
+            'items.*.estimated_unit_cost' => 'nullable|numeric|min:0',
+            'items.*.name' => 'required|string|max:100',
         ]);
 
         try {
@@ -128,6 +129,7 @@ class RequisitionController extends Controller
 
             foreach ($validated['items'] as $item) {
                 $requisition->items()->create([
+                    'name' => $item['name'],
                     'description' => $item['description'],
                     'quantity' => $item['quantity'],
                     'uom_id' => $item['uom'], // only if uom_id exists
