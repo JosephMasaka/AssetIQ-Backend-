@@ -27,6 +27,9 @@ use App\Http\Controllers\Api\GLAccountController;
 use App\Http\Controllers\Api\AccountGroupController;
 use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\TaxCodeController;
+use App\Http\Controllers\Api\DepreciationAreaController;
+use App\Http\Controllers\Api\UserController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -71,6 +74,13 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/company/create', [CompanyController::class, 'createCompany']);
     Route::put('/company/update', [CompanyController::class, 'updateCompany']);
     Route::delete('/company/delete', [CompanyController::class, 'deleteCompany']);
+
+    // User
+    Route::get('/users', [UserController::class, 'index']);
+    Route::post('/user', [UserController::class, 'store']);
+    Route::delete('/user/{id}', [UserController::class, 'destroy']);
+    Route::post('/user/{id}/reset-password', [UserController::class, 'resetPassword']);
+
 
     //Asset Category
     Route::get('/assetcategories', [AssetCategoryController::class, 'index']);
@@ -177,6 +187,12 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/gl-accounts', [GLAccountController::class, 'index']);
         Route::post('/gl-accounts/create', [GLAccountController::class, 'store']);
     });
+
+    //Depreciation Areas
+    Route::get('/depreciation-areas', [DepreciationAreaController::class, 'index']);
+    Route::post('/depreciation-area', [DepreciationAreaController::class, 'store']);
+    Route::put('/depreciation-area/{id}', [DepreciationAreaController::class, 'update']);
+    Route::delete('/depreciation-area/{id}', [DepreciationAreaController::class, 'destroy']);
 
     //Account Groups
     Route::get('/account-groups', [AccountGroupController::class, 'index']);
