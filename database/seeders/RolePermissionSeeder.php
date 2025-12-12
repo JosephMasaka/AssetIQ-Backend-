@@ -15,112 +15,102 @@ class RolePermissionSeeder extends Seeder
             // Reseller
             'reseller:manage',
             'reseller:create',
-            'reseller:edit',
             'reseller:update',
             'reseller:delete',
 
             // Tenant
             'tenant:manage',
             'tenant:create',
-            'tenant:edit',
             'tenant:update',
             'tenant:delete',
 
             //Company
             'company:manage',
-            'company:create',
-            'company:edit',
+            'company:create',            
             'company:update',
             'company:delete',
 
             // User
             'user:manage',
             'user:create',
-            'user:edit',
             'user:update',
             'user:delete',
+
+            // Role
+            'role:manage',
+            'role:create',
+            'role:update',
+            'role:delete',
 
             // Asset Category
             'asset category:manage',
             'asset category:create',
-            'asset category:edit',
             'asset category:update',
             'asset category:delete',
 
             // Asset
             'asset:manage',
             'asset:create',
-            'asset:edit',
             'asset:update',
             'asset:delete',
 
             // Asset Code/RFID/Barcode
             'asset code:manage',
             'asset code:create',
-            'asset code:edit',
             'asset code:update',
             'asset code:delete',
 
             // Asset Valuation
             'asset valuation:manage',
             'asset valuation:create',
-            'asset valuation:edit',
             'asset valuation:update',
             'asset valuation:delete',
 
             // Asset Valuation
             'asset attribute:manage',
             'asset attribute:create',
-            'asset attribute:edit',
             'asset attribute:update',
             'asset attribute:delete',
 
             // Asset History
             'asset history:manage',
             'asset history:create',
-            'asset history:edit',
             'asset history:update',
             'asset history:delete',
 
             // File
             'file:manage',
             'file:create',
-            'file:edit',
             'file:update',
             'file:delete',
 
             // License
             'license:manage',
             'license:create',
-            'license:edit',
             'license:update',
             'license:delete',
 
             // Maintenance
             'maintenance:manage',
             'maintenance:create',
-            'maintenance:edit',
             'maintenance:update',
             'maintenance:delete',
 
             // Components
             'components:manage',
             'components:create',
-            'components:edit',
             'components:update',
             'components:delete',
 
             // consumables
             'consumables:manage',
             'consumables:create',
-            'consumables:edit',
             'consumables:update',
             'consumables:delete',
 
             // Asset Valuation
             'asset attribute:manage',
             'asset attribute:create',
-            'asset attribute:edit',
             'asset attribute:update',
             'asset attribute:delete',
 
@@ -129,28 +119,24 @@ class RolePermissionSeeder extends Seeder
             // Vendor
             'vendor:manage',
             'vendor:create',
-            'vendor:edit',
             'vendor:update',
             'vendor:delete',
 
             // Asset Vendor
             'asset vendor:manage',
             'asset vendor:create',
-            'asset vendor vendor vendor:edit',
-            'asset vendor vendor:update',
+            'asset vendor:update',
             'asset vendor:delete',
 
             // Requisition
             'requisition:manage',
             'requisition:create',
-            'requisition:edit',
             'requisition:update',
             'requisition:delete',
 
             // Purchase Order
             'purchase order:manage',
             'purchase order:create',
-            'purchase order:edit',
             'purchase order:update',
             'purchase order:delete',
 
@@ -170,46 +156,46 @@ class RolePermissionSeeder extends Seeder
             'depreciation rules:update',
             'depreciation rules:delete',
 
+            'depreciation areas:manage',
+            'depreciation areas:create',
+            'depreciation areas:update',
+            'depreciation areas:delete',
+
             'account groups:manage',
-            'account groups groups:create',
+            'account groups:create',
             'account groups:update',
             'account groups:delete',
             
             // Reports
-            'report:view',
+            'report:manage',
 
             //Plans
             'plans:manage',
             'plans:create',
-            'plans:edit',
             'plans:update',
             'plans:delete',
 
             //Plans Request
             'plan request:manage',
             'plan request:create',
-            'plan request Request Request:edit',
-            'plan request Request:update',
+            'plan request:update',
             'plan request:delete',
 
             //Coupon
             'coupon:manage',
             'coupon:create',
-            'coupon:edit',
             'coupon:update',
             'coupon:delete',
 
             //Order
             'order:manage',
             'order:create',
-            'order:edit',
             'order:update',
             'order:delete',
 
             //Order
             'tenant:manage',
             'tenant:create',
-            'tenant:edit',
             'tenant:update',
             'tenant:delete',
 
@@ -224,49 +210,42 @@ class RolePermissionSeeder extends Seeder
             // Reseller
             'reseller:manage',
             'reseller:create',
-            'reseller:edit',
             'reseller:update',
             'reseller:delete',
 
             // Tenant
             'tenant:manage',
             'tenant:create',
-            'tenant:edit',
             'tenant:update',
             'tenant:delete',
 
             //Plans
             'plans:manage',
             'plans:create',
-            'plans:edit',
             'plans:update',
             'plans:delete',
 
             //Plans Request
             'plan request:manage',
             'plan request:create',
-            'plan request Request Request:edit',
-            'plan request Request:update',
+            'plan request:update',
             'plan request:delete',
 
             //Coupon
             'coupon:manage',
             'coupon:create',
-            'coupon:edit',
             'coupon:update',
             'coupon:delete',
 
             //Order
             'order:manage',
             'order:create',
-            'order:edit',
             'order:update',
             'order:delete',
 
             //Tenant
             'tenant:manage',
             'tenant:create',
-            'tenant:edit',
             'tenant:update',
             'tenant:delete',
 
@@ -313,98 +292,90 @@ class RolePermissionSeeder extends Seeder
             //User
             'user:manage',
             'user:create',
-            'user:edit',
             'user:update',
             'user:delete',
+
+            // Role
+            'role:manage',
+            'role:create',
+            'role:update',
+            'role:delete',
 
             // Asset Category
             'asset category:manage',
             'asset category:create',
-            'asset category:edit',
             'asset category:update',
             'asset category:delete',
 
             // Asset
             'asset:manage',
             'asset:create',
-            'asset:edit',
             'asset:update',
             'asset:delete',
 
             // Asset Code/RFID/Barcode
             'asset code:manage',
             'asset code:create',
-            'asset code:edit',
             'asset code:update',
             'asset code:delete',
 
             // Asset Valuation
             'asset valuation:manage',
             'asset valuation:create',
-            'asset valuation:edit',
             'asset valuation:update',
             'asset valuation:delete',
 
             // Asset Valuation
             'asset attribute:manage',
             'asset attribute:create',
-            'asset attribute:edit',
             'asset attribute:update',
             'asset attribute:delete',
 
             // Vendor
             'vendor:manage',
             'vendor:create',
-            'vendor:edit',
             'vendor:update',
             'vendor:delete',
 
             // Asset Vendor
             'asset vendor:manage',
             'asset vendor:create',
-            'asset vendor vendor vendor:edit',
-            'asset vendor vendor:update',
+            'asset vendor:update',
             'asset vendor:delete',
 
             // Asset History
             'asset history:manage',
             'asset history:create',
-            'asset history:edit',
             'asset history:update',
             'asset history:delete',
 
             // File
             'file:manage',
             'file:create',
-            'file:edit',
             'file:update',
             'file:delete',
 
             // License
             'license:manage',
             'license:create',
-            'license:edit',
             'license:update',
             'license:delete',
 
             // Maintenance
             'maintenance:manage',
             'maintenance:create',
-            'maintenance:edit',
             'maintenance:update',
             'maintenance:delete',
 
             // Components
             'components:manage',
             'components:create',
-            'components:edit',
             'components:update',
             'components:delete',
 
             // consumables
             'consumables:manage',
             'consumables:create',
-            'consumables:edit',
             'consumables:update',
             'consumables:delete',
 
@@ -414,14 +385,12 @@ class RolePermissionSeeder extends Seeder
             // Requisition
             'requisition:manage',
             'requisition:create',
-            'requisition:edit',
             'requisition:update',
             'requisition:delete',
 
             // Purchase Order
             'purchase order:manage',
             'purchase order:create',
-            'purchase order:edit',
             'purchase order:update',
             'purchase order:delete',
 
@@ -438,13 +407,18 @@ class RolePermissionSeeder extends Seeder
             'depreciation rules:update',
             'depreciation rules:delete',
 
+            'depreciation areas:manage',
+            'depreciation areas:create',
+            'depreciation areas:update',
+            'depreciation areas:delete',
+
             'account groups:manage',
-            'account groups groups:create',
+            'account groups:create',
             'account groups:update',
             'account groups:delete',
 
             //Reports
-            'report:view',
+            'report:manage',
 
             //Plans
             'plans:manage',
