@@ -151,6 +151,11 @@ class RolePermissionSeeder extends Seeder
             'gl accounts:update',
             'gl accounts:delete',
 
+            'depreciation keys:manage',
+            'depreciation keys:create',
+            'depreciation keys:update',
+            'depreciation keys:delete',
+
             'depreciation rules:manage',
             'depreciation rules:create',
             'depreciation rules:update',
@@ -263,9 +268,8 @@ class RolePermissionSeeder extends Seeder
             //Company
             'company:manage',
             'company:create',
-            'company:edit',
             'company:update',
-            // 'company:delete',
+            'company:delete',
 
             //User
             'user:create',
@@ -401,6 +405,11 @@ class RolePermissionSeeder extends Seeder
             'gl accounts:create',
             'gl accounts:update',
             'gl accounts:delete',
+
+            'depreciation keys:manage',
+            'depreciation keys:create',
+            'depreciation keys:update',
+            'depreciation keys:delete',
 
             'depreciation rules:manage',
             'depreciation rules:create',
