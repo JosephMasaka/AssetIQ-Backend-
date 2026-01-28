@@ -18,11 +18,21 @@ class DashboardController extends Controller
 
         return response()->json([
             'stats' => $this->stats($user),
+            'assets' => $this->assets($user),
             'recentActivity' => $this->recentActivity($user),
             // 'charts' => [
             //     'purchaseOrders' => $this->purchaseOrders($request),
             // ],
         ]);
+    }
+
+    private function assets($user)
+    {
+        return Asset::with('category')
+            ->where('company_id', $user->getCompany())
+            ->latest()
+            ->take(5)
+            ->get();
     }
 
     public function purchaseOrders(Request $request)
