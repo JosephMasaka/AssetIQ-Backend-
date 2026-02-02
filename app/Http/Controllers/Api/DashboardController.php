@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Asset;
 use App\Models\PurchaseOrder;
 use App\Models\PurchaseOrderItem;
+use App\Models\Plan;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -110,23 +111,43 @@ class DashboardController extends Controller
     {
         $companyId = $user->getCompany();
 
+        $company = User::where('id', $companyId)->first();
+
+        $plan = Plan::where('id', $company->requested_plan)->first();
+
         /* ---------- ASSETS ---------- */
-        $assetsNow = Asset::where('company_id', $companyId)->count();
+        $assetsNow = Asset::where('company_id', $companyId)->where('status', 'active')->count();
         $assetsLastMonth = Asset::where('company_id', $companyId)
             ->whereMonth('created_at', now()->subMonth()->month)
             ->count();
+        $assetsLimit = $plan->max_assets; // null = unlimited
+        $assetsUsagePercent = $assetsLimit
+            ? round(($assetsNow / max($assetsLimit, 1)) * 100, 1)
+            : 0;
 
         /* ---------- PURCHASE ORDERS ---------- */
-        $poNow = PurchaseOrder::where('company_id', $companyId)->count();
+        $poNow = PurchaseOrder::where('company_id', $companyId)
+                ->whereYear('created_at', now()->year)
+                ->count();
         $poLastMonth = PurchaseOrder::where('company_id', $companyId)
             ->whereMonth('created_at', now()->subMonth()->month)
             ->count();
+
+        
+        $totalPurchaseCashThisYear = PurchaseOrderItem::where('company_id', $companyId)
+            ->whereYear('created_at', now()->year)
+            ->sum('total_price');
+
 
         /* ---------- USERS ---------- */
         $usersNow = User::where('created_by', $companyId)->count();
         $usersLastMonth = User::where('created_by', $companyId)
             ->whereMonth('created_at', now()->subMonth()->month)
             ->count();
+        $usersLimit = $plan->max_users; // null = unlimited
+        $usersUsagePercent = $usersLimit
+            ? round(($usersNow / max($usersLimit, 1)) * 100, 1)
+            : 0;
 
         /* ---------- ASSET HEALTH ---------- */
         $healthyAssets = Asset::where('company_id', $companyId)
@@ -136,10 +157,15 @@ class DashboardController extends Controller
         return [
             $this->card(
                 'Company Assets',
-                $assetsNow,
+                $assetsLimit ? "{$assetsNow} / {$assetsLimit}" : $assetsNow,
                 $this->percentChange($assetsNow, $assetsLastMonth),
-                $this->progress($assetsNow, max($assetsLastMonth, 1)),
-                'bi-box-seam'
+                $assetsLimit ? $this->progress($assetsNow, $assetsLimit) : 100,
+                'bi-box-seam',
+                [
+                    'used' => $assetsNow,
+                    'limit' => $assetsLimit,
+                    'percent' => $assetsUsagePercent,
+                ]
             ),
 
             $this->card(
@@ -147,15 +173,24 @@ class DashboardController extends Controller
                 $poNow,
                 $this->percentChange($poNow, $poLastMonth),
                 $this->progress($poNow, max($poLastMonth, 1)),
-                'bi-receipt'
+                'bi-receipt',
+                [
+                    'totalPOCash' => $totalPurchaseCashThisYear
+                ]
             ),
+
 
             $this->card(
                 'Active Users',
-                $usersNow,
+                $usersLimit ? "{$usersNow} / {$usersLimit}" : $usersNow,
                 $this->percentChange($usersNow, $usersLastMonth),
-                $this->progress($usersNow, max($usersLastMonth, 1)),
-                'bi-people-fill'
+                $usersLimit ? $this->progress($usersNow, $usersLimit) : 100,
+                'bi-people-fill',
+                [
+                    'used' => $usersNow,
+                    'limit' => $usersLimit,
+                    'percent' => $usersUsagePercent,
+                ]
             ),
 
             $this->card(
@@ -179,10 +214,13 @@ class DashboardController extends Controller
         ];
     }
 
-    private function card($title, $value, $change, $percent, $icon): array
+    private function card($title, $value, $change, $percent, $icon, $meta = null): array
     {
-        return compact('title', 'value', 'change', 'percent', 'icon');
+        $card = compact('title', 'value', 'change', 'percent', 'icon');
+        if ($meta) $card['meta'] = $meta;
+        return $card;
     }
+
 
     /* ===================== ACTIVITY ===================== */
 
