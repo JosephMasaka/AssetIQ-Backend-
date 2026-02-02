@@ -32,7 +32,9 @@ class CompanyController extends Controller
         if ($isSuperAdmin || $canManage) {
             $companies = User::whereHas('roles', function ($q) {
                 $q->where('name', 'company');
-            })->get();
+            })
+            ->where('created_by', $user->id)
+            ->get();
 
             return $this->successResponse($companies, 'Companies retrieved successfully');
         }
@@ -69,6 +71,7 @@ class CompanyController extends Controller
             'name'     => $validated['name'],
             'email'    => $validated['email'],
             'password' => Hash::make($validated['password']),
+            'plan_expire_date' => now()->addMonth(),
         ]);
 
         $company->assignRole('company');
