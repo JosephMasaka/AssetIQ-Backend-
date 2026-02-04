@@ -65,6 +65,22 @@ class AssetController extends Controller
             return $this->errorResponse('Permission Denied', 403);
         }
 
+        $plan = Plan::where('id', $company->requested_plan)->first();
+        if (!$plan) {
+            return $this->errorResponse('Plan not found', 404);
+        }
+
+        // Count active users for this company
+        $assetsCount = Asset::where('created_by', $user->getCompany())
+            ->where('status', 'active')
+            ->count();
+
+        $assetsLimit = $plan->max_assets; // null = unlimited
+
+        if ($assetsLimit !== null && $assetsCount >= $assetsLimit) {
+            return $this->errorResponse('Assets Plan Limit Reached. Please upgrade plan', 403);
+        }
+
         try {
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
