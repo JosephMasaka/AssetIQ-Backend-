@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\Plan;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -88,6 +89,18 @@ class User extends Authenticatable implements JWTSubject
         }
 
         return $companyID;
+    }
+
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class);
+    }
+
+    public function hasModule($key)
+    {
+        if (!$this->plan) return false;
+
+        return $this->plan->modules()->where('key', $key)->exists();
     }
 
 }

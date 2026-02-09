@@ -23,13 +23,18 @@ use App\Http\Controllers\Api\PurchaseOrderController;
 use App\Http\Controllers\Api\GoodsReceiptController;
 use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\Api\DepreciationRuleController;
+use App\Http\Controllers\Api\DepreciationKeyController;
 use App\Http\Controllers\Api\GLAccountController;
 use App\Http\Controllers\Api\AccountGroupController;
 use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\TaxCodeController;
 use App\Http\Controllers\Api\DepreciationAreaController;
 use App\Http\Controllers\Api\UserController;
-
+use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\PlanController;
+use App\Http\Controllers\Api\PlanModuleController;
+use App\Http\Controllers\Api\ModuleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,6 +68,14 @@ Route::middleware('auth:api')->group(function () {
     Route::post('auth/stop-impersonation', [AuthenticatedSessionController::class, 'logout']);
     // Route::get('/check', [AuthController::class, 'checkAuthenticated']);
 
+    // Plans
+    Route::get('/plans', [PlanController::class, 'index']);
+
+    Route::get('/planmodule', [PlanModuleController::class, 'index']);
+    Route::post('/planmodule/create', [PlanModuleController::class, 'store']);
+
+    Route::get('/modules', [ModuleController::class, 'index']);
+
     // ✅ Reseller route
     Route::get('/resellers', [ResellerController::class, 'getResellers']);
     Route::post('/reseller/create', [ResellerController::class, 'createReseller']);
@@ -80,6 +93,15 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/user', [UserController::class, 'store']);
     Route::delete('/user/{id}', [UserController::class, 'destroy']);
     Route::post('/user/{id}/reset-password', [UserController::class, 'resetPassword']);
+
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index']); // main dashboard
+    Route::get('/dashboard/purchase-orders', [DashboardController::class, 'purchaseOrders']); // year-based
+
+    // Roles
+    Route::get('/roles', [RoleController::class, 'index']);
+    Route::post('/role/create', [RoleController::class, 'store']);
+    Route::get('/roles/permissions', [RoleController::class, 'permissions']);
 
 
     //Asset Category
@@ -178,7 +200,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('invoice/{id}', [InvoiceController::class, 'show']);
 
     //Depreciation Rules
-    Route::get('/depreciation-rules', [DepreciationRuleController::class, 'index']);
+    Route::get('/depreciation-rules/{key_id}', [DepreciationRuleController::class, 'index']);
     Route::post('/depreciation-rules', [DepreciationRuleController::class, 'store']);
     Route::put('/depreciation-rules/{id}', [DepreciationRuleController::class, 'update']);
     Route::delete('/depreciation-rules/{id}', [DepreciationRuleController::class, 'destroy']);
@@ -193,6 +215,12 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/depreciation-area', [DepreciationAreaController::class, 'store']);
     Route::put('/depreciation-area/{id}', [DepreciationAreaController::class, 'update']);
     Route::delete('/depreciation-area/{id}', [DepreciationAreaController::class, 'destroy']);
+
+    //Depreciation Keys
+    Route::get('/depreciation-keys', [DepreciationKeyController::class, 'index']);
+    Route::post('/depreciation-key', [DepreciationKeyController::class, 'store']);
+    Route::put('/depreciation-key/{id}', [DepreciationKeyController::class, 'update']);
+    Route::delete('/depreciation-key/{id}', [DepreciationKeyController::class, 'destroy']);
 
     //Account Groups
     Route::get('/account-groups', [AccountGroupController::class, 'index']);
