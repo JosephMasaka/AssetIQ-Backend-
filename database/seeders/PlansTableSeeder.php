@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use App\Models\Plan;
 use App\Models\Module;
 
@@ -13,58 +12,70 @@ class PlansTableSeeder extends Seeder
     {
         $plans = [
             [
-                'name' => 'Free Plan',
-                'price' => 0,
+                'name' => 'Trial License',
+                'price' => 0, // Ksh per month
                 'duration' => 'monthly',
                 'max_users' => 2,
-                'max_assets' => 50,
-                'description' => 'Basic access for small teams',
+                'max_assets' => 10,
+                'description' => 'Free Trial.',
                 'image' => null,
-                // 'modules' => ['assets', 'users'], // module keys
+                // 'modules' => ['assets', 'users'],
             ],
             [
                 'name' => 'Bronze License',
-                'price' => 10,
+                'price' => 2500, // Ksh per month
                 'duration' => 'monthly',
                 'max_users' => 5,
                 'max_assets' => 200,
-                'description' => 'Good for small businesses',
+                'description' => 'Starter plan for small businesses managing basic assets and users.',
                 'image' => null,
-                // 'modules' => ['assets', 'procurement', 'users'],
+                // 'modules' => ['assets', 'users'],
             ],
             [
                 'name' => 'Silver License',
-                'price' => 25,
+                'price' => 6500, // Ksh per month
                 'duration' => 'monthly',
                 'max_users' => 15,
                 'max_assets' => 1000,
-                'description' => 'For growing companies',
+                'description' => 'Ideal for growing SMEs with procurement, reports and asset tracking.',
+                'image' => null,
+                // 'modules' => ['assets', 'procurement', 'users', 'reports'],
+            ],
+            [
+                'name' => 'Gold License',
+                'price' => 15000, // Ksh per month
+                'duration' => 'monthly',
+                'max_users' => 50,
+                'max_assets' => 5000,
+                'description' => 'For established companies needing finance, maintenance and full reporting.',
                 'image' => null,
                 // 'modules' => ['assets', 'procurement', 'finance', 'maintenance', 'users', 'reports'],
             ],
             [
-                'name' => 'Gold License',
-                'price' => 50,
+                'name' => 'Platinum License',
+                'price' => 35000, // Ksh per month
                 'duration' => 'monthly',
-                'max_users' => 50,
-                'max_assets' => 5000,
-                'description' => 'For large teams and enterprises',
+                'max_users' => 200,
+                'max_assets' => 20000,
+                'description' => 'Enterprise-grade plan with all modules, high limits and priority support.',
                 'image' => null,
                 // 'modules' => ['assets', 'procurement', 'finance', 'maintenance', 'users', 'reports', 'settings'],
             ],
         ];
 
         foreach ($plans as $planData) {
-            // Insert or update plan
             $plan = Plan::updateOrCreate(
                 ['name' => $planData['name']],
-                array_merge($planData, [
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ])
+                [
+                    'price' => $planData['price'],
+                    'duration' => $planData['duration'],
+                    'max_users' => $planData['max_users'],
+                    'max_assets' => $planData['max_assets'],
+                    'description' => $planData['description'],
+                    'image' => $planData['image'],
+                ]
             );
 
-            // Attach modules
             if (!empty($planData['modules'])) {
                 $moduleIds = Module::whereIn('key', $planData['modules'])->pluck('id')->toArray();
                 $plan->modules()->sync($moduleIds);
