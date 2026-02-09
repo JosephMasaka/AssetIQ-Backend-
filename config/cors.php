@@ -22,6 +22,7 @@ return [
     'allowed_origins' => [
         'http://localhost:4200',
         'http://localhost:3000',
+        'https://api.tunzaassets.co.ke//api',
         // 'https://dailychessacademy.co.ke',
         // 'https://www.dailychessacademy.co.ke',
         // 'https://chesskenya-109433b56dcd.herokuapp.com',
