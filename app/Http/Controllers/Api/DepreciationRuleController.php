@@ -11,9 +11,9 @@ class DepreciationRuleController extends Controller
 {
     use ApiResponser;
 
-    public function index()
+    public function index($key_id)
     {
-        $rules = DepreciationRule::where('company_id', auth()->user()->getCompany())->get();
+        $rules = DepreciationRule::where('company_id', auth()->user()->getCompany())->where('depreciation_key_id', $key_id)->get();
         return $this->successResponse($rules);
     }
 

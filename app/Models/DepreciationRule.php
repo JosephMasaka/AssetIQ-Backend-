@@ -8,16 +8,22 @@ class DepreciationRule extends Model
 {
     protected $fillable = [
         'company_id',
+        'depreciation_key_id',
+        'depreciation_area',
         'name',
         'method',
         'useful_life',
+        'depreciation_rate',
         'salvage_value',
+        'valid_from_year',
+        'valid_to_year',
         'gl_account',
         'cost_center',
         'asset_class',
         'is_active',
         'period_control',
-        'base_value'
+        'base_value',
+        'is_active',
     ];
 
     protected $casts = [
