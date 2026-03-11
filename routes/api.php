@@ -43,6 +43,9 @@ use App\Http\Controllers\Api\ModuleController;
 | Authentication (JWT based)
 |--------------------------------------------------------------------------
 */
+Route::options('{any}', function () {
+        return response()->json([], 200);
+    })->where('any', '.*');
 
 Route::get('/test', fn() => response()->json(['message' => 'Laravel API is working 🚀']));
 
@@ -64,9 +67,6 @@ Route::prefix('auth')->group(function () {
 // Protected Auth Routes (JWT middleware)
 // ------------------------
 Route::middleware('auth:api')->group(function () {
-    Route::options('{any}', function () {
-        return response()->json([], 200);
-    })->where('any', '.*');
     Route::post('auth/logout', [AuthenticatedSessionController::class, 'logout']);
     Route::post('auth/stop-impersonation', [AuthenticatedSessionController::class, 'logout']);
     // Route::get('/check', [AuthController::class, 'checkAuthenticated']);
