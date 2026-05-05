@@ -11,43 +11,24 @@ use Illuminate\Support\Facades\Log;
 
 class AuthenticatedSessionController extends Controller
 {
+
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
-        $remember = $request->boolean('remember'); // expects true/false from frontend
 
-        // Set TTL: 1 week if remember is checked, else default from config
-        $ttl = $remember ? (60 * 24 * 7) : config('jwt.ttl'); // 7 days vs default (usually 60 mins)
-
-        // Try to authenticate with TTL
-        if (!$token = auth('api')->setTTL($ttl)->attempt($credentials)) {
-            return response()->json(['error' => 'Invalid credentials'], 401);
+        if (!Auth::attempt($credentials, $request->boolean('remember_me'))) {
+            return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
-        $user = auth('api')->user();
-        // $permissions = $user->getAllPermissions()->pluck('name') ?? collect();
-        $permissions = $user->roles()
-            ->with('permissions')
-            ->get()
-            ->pluck('permissions')
-            ->flatten()
-            ->pluck('name')
-            ->unique()
-            ->values();
+        $user = Auth::user();
 
-        // Check if user is active
-        if (!$user->is_active || $user->is_active === 0) {
-            auth('api')->invalidate($token);
-
-            return response()->json(['error' => 'Account is inactive. Contact administrator.'], 403);
+        if (!$user->is_active) {
+            Auth::logout();
+            return response()->json(['message' => 'Account inactive'], 403);
         }
 
         return response()->json([
-            'access_token' => $token,
-            'token_type'   => 'bearer',
-            'expires_in'   => $ttl * 60, // in seconds
-            'user'         => $user,
-            'permissions' => $permissions,
+            'user' => $user
         ]);
     }
 
@@ -75,9 +56,13 @@ class AuthenticatedSessionController extends Controller
         return response()->json(Auth::user());
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return response()->json(['message' => 'Logged out']);
     }
 

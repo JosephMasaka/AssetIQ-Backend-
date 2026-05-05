@@ -41,10 +41,6 @@ return [
             'provider' => 'users',
         ],
         
-        'api' => [
-            'driver' => 'jwt', // 👈 JWT guard
-            'provider' => 'users',
-        ],
     ],
 
     /*

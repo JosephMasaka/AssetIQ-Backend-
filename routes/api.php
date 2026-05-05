@@ -35,6 +35,7 @@ use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\PlanController;
 use App\Http\Controllers\Api\PlanModuleController;
 use App\Http\Controllers\Api\ModuleController;
+use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,9 +67,15 @@ Route::prefix('auth')->group(function () {
 // ------------------------
 // Protected Auth Routes (JWT middleware)
 // ------------------------
-Route::middleware('auth:api')->group(function () {
+Route::middleware(
+    EnsureFrontendRequestsAreStateful::class,
+    'auth:sanctum')->group(function () {
+
     Route::post('auth/logout', [AuthenticatedSessionController::class, 'logout']);
     Route::post('auth/stop-impersonation', [AuthenticatedSessionController::class, 'logout']);
+    Route::get('auth/logged_in_user', function (Request $request) {
+        return $request->user();
+    });
     // Route::get('/check', [AuthController::class, 'checkAuthenticated']);
 
     // Plans

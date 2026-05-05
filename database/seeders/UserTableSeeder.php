@@ -70,10 +70,12 @@ class UserTableSeeder extends Seeder
                 'phone'             => '+254722222222',
                 'job_title'         => 'IT Admin',
                 'department'        => 'IT',
-                'created_by'        => 1,
+                'created_by'        => 2,
                 'updated_by'        => 1,
             ]
         );
         $companyAdmin->assignRole('company');
     }
+
+
 }
