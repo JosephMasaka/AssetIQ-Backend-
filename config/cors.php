@@ -23,6 +23,7 @@ return [
         'http://localhost:4200',
         'http://localhost:3000',
         'https://tunzaassets.co.ke',
+        'http://127.0.0.1:4200',
         // 'https://dailychessacademy.co.ke',
         // 'https://www.dailychessacademy.co.ke',
         // 'https://chesskenya-109433b56dcd.herokuapp.com',
