@@ -36,6 +36,7 @@ use App\Http\Controllers\Api\PlanController;
 use App\Http\Controllers\Api\PlanModuleController;
 use App\Http\Controllers\Api\ModuleController;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,33 +51,29 @@ Route::options('{any}', function () {
 
 Route::get('/test', fn() => response()->json(['message' => 'Laravel API is working 🚀']));
 
-// ✅ CSRF route (optional if SPA + cookies)
-Route::get('/jwt/csrf-cookie', fn() => response()->json(['csrf_token' => csrf_token()]));
-
 // ------------------------
 // Public Auth Routes
 // ------------------------
 Route::prefix('auth')->group(function () {
-    Route::post('/login', [AuthenticatedSessionController::class, 'login'])
-        ->middleware('throttle:5,1'); // 5 requests per minute
-    Route::post('/register', [AuthenticatedSessionController::class, 'register']);
-    Route::post('/refresh', [AuthenticatedSessionController::class, 'refresh']);
-    Route::post('/login-as', [AuthenticatedSessionController::class, 'loginAs']);
+        Route::post('/login', [AuthenticatedSessionController::class, 'login'])
+            ->middleware('throttle:5,1'); // 5 requests per minute
+        Route::post('/register', [AuthenticatedSessionController::class, 'register']);
+        Route::post('/refresh', [AuthenticatedSessionController::class, 'refresh']);
+        // Route::post('/login-as', [AuthenticatedSessionController::class, 'loginAs']);
 });
 
 // ------------------------
-// Protected Auth Routes (JWT middleware)
+// Protected Auth Routes
 // ------------------------
-Route::middleware(
-    EnsureFrontendRequestsAreStateful::class,
-    'auth:sanctum')->group(function () {
-
-    Route::post('auth/logout', [AuthenticatedSessionController::class, 'logout']);
-    Route::post('auth/stop-impersonation', [AuthenticatedSessionController::class, 'logout']);
-    Route::get('auth/logged_in_user', function (Request $request) {
-        return $request->user();
+Route::middleware('auth:sanctum')->group(function () {
+    Route::prefix('auth')->group(function () {
+        Route::post('/logout', [AuthenticatedSessionController::class, 'logout']);
+        Route::post('/stop-impersonation', [AuthenticatedSessionController::class, 'logout']);
+        Route::get('/logged_in_user', function (Request $request) {
+            return $request->user();
+        });
+        // Route::get('/check', [AuthController::class, 'checkAuthenticated']);
     });
-    // Route::get('/check', [AuthController::class, 'checkAuthenticated']);
 
     // Plans
     Route::get('/plans', [PlanController::class, 'index']);
