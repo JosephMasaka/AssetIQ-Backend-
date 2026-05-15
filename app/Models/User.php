@@ -11,56 +11,33 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles;
 
+    // ✅ Do NOT declare $guard_name here.
+    // Spatie will auto-detect it from config/auth.php.
+    // Hardcoding it causes a mismatch when auth:sanctum is the active guard.
+
+    protected string $guard_name = 'sanctum';
+
     protected $fillable = [
-        'tenant_id',
-        'username',
-        'name',
-        'email',
-        'password',
-        'avatar',
-        'auth_provider',
-        'is_active',
-        'role',
-        'role_id',
-        'permissions',
-        'phone',
-        'job_title',
-        'department',
-        'google_id',
-        'created_by'
+        'tenant_id', 'username', 'name', 'email', 'password',
+        'avatar', 'auth_provider', 'is_active', 'role', 'role_id',
+        'permissions', 'phone', 'job_title', 'department',
+        'google_id', 'created_by',
     ];
 
-    // ✅ Changed from 'api' to 'web' for session-based auth
-    protected $guard_name = 'web';
-
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $hidden = ['password', 'remember_token'];
 
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
         ];
     }
 
-    // ✅ Removed: getJWTIdentifier() — not needed for session auth
-    // ✅ Removed: getJWTCustomClaims()  — not needed for session auth
-
     public function getCompany()
     {
-        // ✅ Changed from auth('api') to auth() for session-based auth
         $user = auth()->user();
-
-        if ($user->role === 'company') {
-            $companyID = $user->id;
-        } else {
-            $companyID = $user->created_by;
-        }
-
-        return $companyID;
+        return $user->role === 'company' ? $user->id : $user->created_by;
     }
 
     public function plan()

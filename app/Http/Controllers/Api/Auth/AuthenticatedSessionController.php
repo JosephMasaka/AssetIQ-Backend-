@@ -43,7 +43,56 @@ class AuthenticatedSessionController extends Controller
 
     public function me(Request $request)
     {
-        return response()->json($request->user());
+        $user = $request->user();
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Unauthenticated'
+            ], 401);
+        }
+
+        try {
+
+            $permissions = collect();
+
+            // Direct permissions
+            if ($user->permissions) {
+                $permissions = $permissions->merge(
+                    $user->permissions->pluck('name')
+                );
+            }
+
+            // Role permissions
+            foreach ($user->roles as $role) {
+
+                if ($role->permissions) {
+                    $permissions = $permissions->merge(
+                        $role->permissions->pluck('name')
+                    );
+                }
+            }
+
+            $permissions = $permissions
+                ->unique()
+                ->values()
+                ->toArray();
+
+        } catch (\Throwable $e) {
+
+            \Log::error($e);
+
+            $permissions = [];
+        }
+
+        return response()->json([
+            'id'          => $user->id,
+            'name'        => $user->name,
+            'username'    => $user->username,
+            'email'       => $user->email,
+            'tenant_id'   => $user->tenant_id,
+            'permissions' => $permissions,
+            'roles'       => $user->roles->pluck('name'),
+        ]);
     }
 
     public function logout(Request $request)

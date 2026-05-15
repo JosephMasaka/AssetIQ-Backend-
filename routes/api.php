@@ -69,9 +69,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('auth')->group(function () {
         Route::post('/logout', [AuthenticatedSessionController::class, 'logout']);
         Route::post('/stop-impersonation', [AuthenticatedSessionController::class, 'logout']);
-        Route::get('/logged_in_user', function (Request $request) {
-            return $request->user();
-        });
+        Route::get('/logged_in_user', [AuthenticatedSessionController::class, 'me']);
         // Route::get('/check', [AuthController::class, 'checkAuthenticated']);
     });
 

@@ -128,6 +128,24 @@ class RolePermissionSeeder extends Seeder
             'asset vendor:update',
             'asset vendor:delete',
 
+            //Components
+            'components:manage',
+            'components:create',
+            'components:update',
+            'components:delete',
+
+            //Accessories
+            'accessories:manage',
+            'accessories:create',
+            'accessories:update',
+            'accessories:delete',
+
+            //Consumables
+            'consumables:manage',
+            'consumables:create',
+            'consumables:update',
+            'consumables:delete',
+
             // Requisition
             'requisition:manage',
             'requisition:create',
