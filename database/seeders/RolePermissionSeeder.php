@@ -19,10 +19,10 @@ class RolePermissionSeeder extends Seeder
             'reseller:delete',
 
             // Tenant
-            'tenant:manage',
-            'tenant:create',
-            'tenant:update',
-            'tenant:delete',
+            // 'tenant:manage',
+            // 'tenant:create',
+            // 'tenant:update',
+            // 'tenant:delete',
 
             //Company
             'company:manage',
@@ -237,10 +237,10 @@ class RolePermissionSeeder extends Seeder
             'reseller:delete',
 
             // Tenant
-            'tenant:manage',
-            'tenant:create',
-            'tenant:update',
-            'tenant:delete',
+            'company:manage',
+            'company:create',
+            'company:update',
+            'company:delete',
 
             //Plans
             'plans:manage',
@@ -267,10 +267,10 @@ class RolePermissionSeeder extends Seeder
             'order:delete',
 
             //Tenant
-            'tenant:manage',
-            'tenant:create',
-            'tenant:update',
-            'tenant:delete',
+            // 'tenant:manage',
+            // 'tenant:create',
+            // 'tenant:update',
+            // 'tenant:delete',
 
             //Administration
             'administration:manage',

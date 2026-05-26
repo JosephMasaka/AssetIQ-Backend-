@@ -19,7 +19,7 @@ class ResellerController extends Controller
      */
     public function getResellers()
     {
-        $user = auth('api')->user();
+        $user = auth()->user();
         Log::info($user);
         if (!$user) {
             return $this->errorResponse('Unauthenticated', 401);
@@ -49,7 +49,7 @@ class ResellerController extends Controller
      */
     public function createReseller(Request $request)
     {
-        $user = auth('api')->user();
+        $user = auth()->user();
         if (!$user) {
             return $this->errorResponse('Unauthenticated', 401);
         }
@@ -85,7 +85,7 @@ class ResellerController extends Controller
      */
     public function updateReseller(Request $request)
     {
-        $user = auth('api')->user();
+        $user = auth()->user();
         if (!$user) {
             return $this->errorResponse('Unauthenticated', 401);
         }
@@ -128,7 +128,7 @@ class ResellerController extends Controller
      */
     public function deleteReseller(Request $request)
     {
-        $user = auth('api')->user();
+        $user = auth()->user();
         if (!$user) {
             return $this->errorResponse('Unauthenticated', 401);
         }

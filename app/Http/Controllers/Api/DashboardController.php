@@ -12,6 +12,8 @@ use App\Models\Plan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
+use App\Policies\DashboardPolicy;
+
 class DashboardController extends Controller
 {
     public function index(Request $request)
@@ -121,6 +123,7 @@ class DashboardController extends Controller
         $assetsLastMonth = Asset::where('company_id', $companyId)
             ->whereMonth('created_at', now()->subMonth()->month)
             ->count();
+        Log::info($plan);
         $assetsLimit = $plan->max_assets; // null = unlimited
         $assetsUsagePercent = $assetsLimit
             ? round(($assetsNow / max($assetsLimit, 1)) * 100, 1)
