@@ -15,7 +15,7 @@ class User extends Authenticatable
     // Spatie will auto-detect it from config/auth.php.
     // Hardcoding it causes a mismatch when auth:sanctum is the active guard.
 
-    protected string $guard_name = 'sanctum';
+    protected string $guard_name = 'web';
 
     protected $fillable = [
         'tenant_id', 'username', 'name', 'email', 'password',
