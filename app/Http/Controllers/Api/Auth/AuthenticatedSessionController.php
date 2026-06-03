@@ -141,11 +141,23 @@ class AuthenticatedSessionController extends Controller
         session([
             'impersonator_id' => $admin->id
         ]);
-
+        
         Auth::login($user);
 
+        // Build permissions the safe way
+        $permissions = collect();
+        if ($user->permissions) {
+            $permissions = $permissions->merge($user->permissions->pluck('name'));
+        }
+        foreach ($user->roles as $role) {
+            if ($role->permissions) {
+                $permissions = $permissions->merge($role->permissions->pluck('name'));
+            }
+        }
+
         return response()->json([
-            'user' => $user,
+            'user'         => $user,
+            'permissions'  => $permissions->unique()->values(),
             'impersonated' => true
         ]);
     }
@@ -162,10 +174,20 @@ class AuthenticatedSessionController extends Controller
 
         session()->forget('impersonator_id');
 
+        $permissions = collect();
+        if ($admin->permissions) {
+            $permissions = $permissions->merge($admin->permissions->pluck('name'));
+        }
+        foreach ($admin->roles as $role) {
+            if ($role->permissions) {
+                $permissions = $permissions->merge($role->permissions->pluck('name'));
+            }
+        }
+
         return response()->json([
-            'user' => $admin,
+            'user'         => $admin,
+            'permissions'  => $permissions->unique()->values(),
             'impersonated' => false
         ]);
     }
-
 }
