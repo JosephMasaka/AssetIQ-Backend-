@@ -11,16 +11,10 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles;
 
-    // ✅ Do NOT declare $guard_name here.
-    // Spatie will auto-detect it from config/auth.php.
-    // Hardcoding it causes a mismatch when auth:sanctum is the active guard.
-
-    protected string $guard_name = 'web';
-
     protected $fillable = [
         'tenant_id', 'username', 'name', 'email', 'password',
         'avatar', 'auth_provider', 'is_active', 'role', 'role_id',
-        'permissions', 'phone', 'job_title', 'department',
+        'phone', 'job_title', 'department',
         'google_id', 'created_by',
     ];
 
@@ -32,6 +26,12 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password'          => 'hashed',
         ];
+    }
+
+    // ✅ Override to prevent null return crashing Spatie's HasRoles trait
+    public function getDirectPermissions(): \Illuminate\Support\Collection
+    {
+        return parent::getDirectPermissions() ?? collect();
     }
 
     public function getCompany()
