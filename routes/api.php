@@ -33,6 +33,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\PlanController;
+use App\Http\Controllers\Api\PlanRequestController;
 use App\Http\Controllers\Api\PlanModuleController;
 use App\Http\Controllers\Api\ModuleController;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
