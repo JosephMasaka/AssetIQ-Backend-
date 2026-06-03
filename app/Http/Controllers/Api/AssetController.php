@@ -23,7 +23,7 @@ class AssetController extends Controller
      */
     public function index()
     {
-        $user = auth('api')->user();
+        $user = auth()->user();
 
         if (!$user) {
             return $this->errorResponse('Unauthenticated', 401);
@@ -49,7 +49,7 @@ class AssetController extends Controller
      */
     public function store(Request $request)
     {
-        $user = auth('api')->user();
+        $user = auth()->user();
 
         if (!$user) {
             return $this->errorResponse('Unauthenticated', 401);
@@ -167,7 +167,7 @@ class AssetController extends Controller
 
     public function show($id)
     {
-        $user = auth('api')->user();
+        $user = auth()->user();
 
         if (!$user) {
             return $this->errorResponse('Unauthenticated', 401);
