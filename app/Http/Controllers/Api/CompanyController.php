@@ -18,7 +18,7 @@ class CompanyController extends Controller
      */
     public function getCompanies()
     {
-        $user = auth('api')->user();
+        $user = auth()->user();
 
         if (!$user) {
             return $this->errorResponse('Unauthenticated', 401);
@@ -47,7 +47,7 @@ class CompanyController extends Controller
      */
     public function createCompany(Request $request)
     {
-        $user = auth('api')->user();
+        $user = auth()->user();
         if (!$user) {
             return $this->errorResponse('Unauthenticated', 401);
         }
@@ -84,7 +84,7 @@ class CompanyController extends Controller
      */
     public function updateCompany(Request $request)
     {
-        $user = auth('api')->user();
+        $user = auth()->user();
         if (!$user) {
             return $this->errorResponse('Unauthenticated', 401);
         }
@@ -127,7 +127,7 @@ class CompanyController extends Controller
      */
     public function deleteCompany(Request $request)
     {
-        $user = auth('api')->user();
+        $user = auth()->user();
         if (!$user) {
             return $this->errorResponse('Unauthenticated', 401);
         }
