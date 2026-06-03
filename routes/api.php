@@ -59,7 +59,7 @@ Route::prefix('auth')->group(function () {
             ->middleware('throttle:5,1'); // 5 requests per minute
         Route::post('/register', [AuthenticatedSessionController::class, 'register']);
         Route::post('/refresh', [AuthenticatedSessionController::class, 'refresh']);
-        // Route::post('/login-as', [AuthenticatedSessionController::class, 'loginAs']);
+        Route::post('/login-as', [AuthenticatedSessionController::class, 'loginAs']);
 });
 
 // ------------------------
@@ -75,6 +75,14 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Plans
     Route::get('/plans', [PlanController::class, 'index']);
+
+    Route::get('plan-requests/',           [PlanRequestController::class, 'index']);
+    Route::get('plan-requests/stats',      [PlanRequestController::class, 'stats']);
+    Route::get('plan-requests/{id}',       [PlanRequestController::class, 'show']);
+    Route::post('plan-requests/',          [PlanRequestController::class, 'store']);
+    Route::post('plan-requests/{id}/approve', [PlanRequestController::class, 'approve']);
+    Route::post('plan-requests/{id}/reject',  [PlanRequestController::class, 'reject']);
+    Route::post('plan-requests/{id}/cancel',  [PlanRequestController::class, 'cancel']);
 
     Route::get('/planmodule', [PlanModuleController::class, 'index']);
     Route::post('/planmodule/create', [PlanModuleController::class, 'store']);
