@@ -279,9 +279,6 @@ class RolePermissionSeeder extends Seeder
         ];
 
         $resellerPermissions = [
-            // 'reseller:manage',
-            // 'tenant:create',
-            // 'tenant:manage',
 
             //Company
             'company:manage',
@@ -460,13 +457,13 @@ class RolePermissionSeeder extends Seeder
 
         // --- Create Permissions if Missing ---
         foreach ($permissions as $perm) {
-            Permission::firstOrCreate(['name' => $perm, 'guard_name' => 'api']);
+            Permission::firstOrCreate(['name' => $perm, 'guard_name' => 'web']);
         }
 
         // --- Define Roles ---
-        $superAdmin = Role::firstOrCreate(['name' => 'superadmin', 'guard_name' => 'api']);
-        $reseller   = Role::firstOrCreate(['name' => 'reseller', 'guard_name' => 'api']);
-        $company    = Role::firstOrCreate(['name' => 'company', 'guard_name' => 'api']);
+        $superAdmin = Role::firstOrCreate(['name' => 'superadmin', 'guard_name' => 'web']);
+        $reseller   = Role::firstOrCreate(['name' => 'reseller', 'guard_name' => 'web']);
+        $company    = Role::firstOrCreate(['name' => 'company', 'guard_name' => 'web']);
 
         // --- Assign Permissions ---
         $superAdmin->syncPermissions($superAdminPermissions);
