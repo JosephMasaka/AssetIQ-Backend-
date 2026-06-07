@@ -14,7 +14,7 @@ class LicenseController extends Controller
 
     public function index($assetId)
     {
-        $user = auth('api')->user();
+        $user = auth()->user();
 
         if (!$user) {
             return $this->errorResponse('Unauthenticated', 401);
@@ -35,7 +35,7 @@ class LicenseController extends Controller
 
     public function store(Request $request)
     {
-        $user = auth('api')->user();
+        $user = auth()->user();
 
         if (!$user) {
             return $this->errorResponse('Unauthenticated', 401);

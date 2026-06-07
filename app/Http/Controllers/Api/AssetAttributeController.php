@@ -17,7 +17,7 @@ class AssetAttributeController extends Controller
      */
     public function index(Request $request, $id)
     {
-        $user = auth('api')->user();
+        $user = auth()->user();
         if (!$user) return $this->errorResponse('Unauthenticated', 401);
 
         $canManage = $user->roles()->whereHas('permissions', function ($q) {
@@ -43,7 +43,7 @@ class AssetAttributeController extends Controller
      */
     public function store(Request $request)
     {
-        $user = auth('api')->user();
+        $user = auth()->user();
         if (!$user) return $this->errorResponse('Unauthenticated', 401);
 
         $canManage = $user->roles()->whereHas('permissions', function ($q) {

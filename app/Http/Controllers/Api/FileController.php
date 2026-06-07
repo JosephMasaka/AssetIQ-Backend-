@@ -15,7 +15,7 @@ class FileController extends Controller
 
     public function index(Request $request, $asset_id)
     {
-        $user = auth('api')->user();
+        $user = auth()->user();
 
         if (!$user) return $this->errorResponse('Unauthenticated', 401);
 
@@ -36,7 +36,7 @@ class FileController extends Controller
 
     public function store(Request $request)
     {
-        $user = auth('api')->user();
+        $user = auth()->user();
 
         if (!$user) return $this->errorResponse('Unauthenticated', 401);
 
