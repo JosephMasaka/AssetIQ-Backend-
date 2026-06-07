@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Asset;
+use App\Models\Plan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -65,7 +66,7 @@ class AssetController extends Controller
             return $this->errorResponse('Permission Denied', 403);
         }
 
-        $plan = Plan::where('id', $company->requested_plan)->first();
+        $plan = Plan::where('id', $user->getCompany())->first();
         if (!$plan) {
             return $this->errorResponse('Plan not found', 404);
         }
