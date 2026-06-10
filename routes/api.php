@@ -121,10 +121,15 @@ Route::middleware('auth:sanctum')->group(function () {
     //Asset Category
     Route::get('/assetcategories', [AssetCategoryController::class, 'index']);
     Route::post('/assetcategory/create', [AssetCategoryController::class, 'store']);
+    Route::put('/assetcategory/update/{id}',  [AssetCategoryController::class, 'update']);
+    Route::delete('/assetcategory/delete/{id}', [AssetCategoryController::class, 'delete']);
 
     //Vendor
     Route::get('/vendors', [VendorController::class, 'index']);
+    Route::get('/vendor/{id}', [VendorController::class, 'show']);
     Route::post('/vendor/create', [VendorController::class, 'store']);
+    Route::put('/vendor/update/{id}',   [VendorController::class, 'update']);  
+    Route::delete('/vendor/delete/{id}',[VendorController::class, 'delete']);
 
     //Asset Master
     Route::get('/assetmaster', [AssetController::class, 'index']);
