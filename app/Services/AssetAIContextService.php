@@ -15,36 +15,36 @@ class AssetAIContextService
         $company = auth()->user()->getCompany();
 
         $totalAssets = Asset::where(
-            'created_by',
+            'company_id',
             $company
         )->count();
 
         $activeAssets = Asset::where(
-            'created_by',
+            'company_id',
             $company
         )
-        ->where('status','active')
+        ->where('status', 'active')
         ->count();
 
         $maintenanceAssets = Asset::where(
-            'created_by',
+            'company_id',
             $company
         )
-        ->where('status','under_maintenance')
+        ->where('status', 'under_maintenance')
         ->count();
 
         $disposedAssets = Asset::where(
-            'created_by',
+            'company_id',
             $company
         )
-        ->where('status','disposed')
+        ->where('status', 'disposed')
         ->count();
 
         $assignedAssets = AssetAssignment::whereHas(
             'asset',
             fn($q) =>
                 $q->where(
-                    'tenant_id',
+                    'company_id',
                     $company
                 )
         )
@@ -52,7 +52,7 @@ class AssetAIContextService
         ->count();
 
         $vendors = Vendor::where(
-            'created_by',
+            'company_id',
             $company
         )->count();
 
@@ -165,7 +165,7 @@ class AssetAIContextService
         int $disposed
     ): int {
 
-        if($total === 0) {
+        if ($total === 0) {
             return 100;
         }
 
