@@ -83,4 +83,83 @@ class AssetCategoryController extends Controller
 
         return $this->successResponse($category, 'Asset Category created successfully', 201);
     }
+
+    public function update(Request $request, int $id)
+    {
+        $user = auth()->user();
+
+        if (!$user) {
+            return $this->errorResponse('Unauthenticated', 401);
+        }
+
+        // Check permissions
+        $isCompanyAdmin = $user->roles()->where('name', 'company')->exists();
+        $canManage = $user->roles()->whereHas('permissions', function ($q) {
+            $q->where('name', 'asset category:update');
+        })->exists();
+
+        if (!($isCompanyAdmin || $canManage)) {
+            return $this->errorResponse('Permission Denied', 403);
+        }
+ 
+        // Scope to the company — prevents cross-tenant edits
+        $category = AssetCategory::where('id', $id)
+            ->where('company_id', $user->getCompany())
+            ->first();
+ 
+        if (!$category) {
+            return $this->errorResponse('Asset category not found', 404);
+        }
+ 
+        $validated = $request->validate([
+            'name'        => ['required', 'string', 'max:255'],
+            'code'        => [
+                'required', 'string', 'max:100',
+                // Ignore the current record's own code when checking uniqueness
+                Rule::unique('asset_categories', 'code')
+                    ->ignore($category->id)
+                    ->where(fn($q) => $q->where('company_id', $user->company_id)),
+            ],
+            'description' => ['nullable', 'string'],
+            'parent_id'   => ['nullable', 'exists:asset_categories,id'],
+        ]);
+ 
+        $category->update([
+            'name'        => $validated['name'],
+            'code'        => $validated['code'],
+            'description' => $validated['description'] ?? $category->description,
+            'parent_id'   => $validated['parent_id']   ?? $category->parent_id,
+        ]);
+ 
+        return $this->successResponse($category->fresh(), 'Asset category updated successfully');
+    }
+ 
+    // ─── DELETE ─────────────────────────────────────────────────────────────────
+ 
+    public function delete(int $id)
+    {
+        $user = auth()->user();
+
+        if (!$user) {
+            return $this->errorResponse('Unauthenticated', 401);
+        }
+
+        // Check permissions
+        $isCompanyAdmin = $user->roles()->where('name', 'company')->exists();
+        $canManage = $user->roles()->whereHas('permissions', function ($q) {
+            $q->where('name', 'asset category:delete');
+        })->exists();
+ 
+        $category = AssetCategory::where('id', $id)
+            ->where('company_id', $user->getCompany())
+            ->first();
+ 
+        if (!$category) {
+            return $this->errorResponse('Asset category not found', 404);
+        }
+ 
+        $category->delete();
+ 
+        return $this->successResponse(null, 'Asset category deleted successfully');
+    }
 }

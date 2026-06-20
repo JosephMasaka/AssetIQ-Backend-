@@ -8,7 +8,7 @@ class AssetCode extends Model
 {
     protected $fillable = [
         'asset_id', 
-        'code_type', 
+        'code_type', //QR, RFID, Barcode etc
         'code_value',
         'company_id',
         'created_by',
