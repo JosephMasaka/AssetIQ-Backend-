@@ -68,6 +68,7 @@ class UserTableSeeder extends Seeder
                 'auth_provider'     => 'local',
                 'is_active'         => true,
                 'phone'             => '+254722222222',
+                'requested_plan'    => 1,
                 'job_title'         => 'IT Admin',
                 'department'        => 'IT',
                 'created_by'        => 2,
