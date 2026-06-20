@@ -36,6 +36,12 @@ use App\Http\Controllers\Api\PlanController;
 use App\Http\Controllers\Api\PlanRequestController;
 use App\Http\Controllers\Api\PlanModuleController;
 use App\Http\Controllers\Api\ModuleController;
+use App\Http\Controllers\Api\AssetAssignmentController;
+use App\Http\Controllers\Api\AssetAICopilotController;
+use App\Http\Controllers\Api\WorkOrderController;
+// use App\Http\Controllers\Api\PreventiveMaintenanceController;
+// use App\Http\Controllers\Api\SparePartController;
+// use App\Http\Controllers\Api\ComplianceRequirementController;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 use Illuminate\Http\Request;
 
@@ -107,6 +113,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/user', [UserController::class, 'store']);
     Route::delete('/user/{id}', [UserController::class, 'destroy']);
     Route::post('/user/{id}/reset-password', [UserController::class, 'resetPassword']);
+    Route::get('/users/employees', [UserController::class, 'employees']);
 
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index']); // main dashboard
@@ -135,17 +142,36 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/assetmaster', [AssetController::class, 'index']);
     Route::post('/assetmaster/create', [AssetController::class, 'store']);
     Route::get('/assetmaster/{id}', [AssetController::class, 'show']);
+    Route::get('/assetmaster/assets/{asset}/licenses', [LicenseController::class, 'assetLicenses']);
 
     //Asset Attributes
     Route::get('/assetmaster/attributes/{id}', [AssetAttributeController::class, 'index']);
     Route::post('/assetmaster/attribute/create', [AssetAttributeController::class, 'store']);
     Route::get('/assetmaster/attribute/{id}', [AssetAttributeController::class, 'show']);
 
+    //Asset Assigments
+    Route::get(
+        '/assets/{asset}/assignments',
+        [AssetAssignmentController::class, 'index']
+    );
+
+    Route::post(
+        '/asset-assignments',
+        [AssetAssignmentController::class, 'store']
+    );
+
+    Route::post(
+        '/asset-assignments/{assignment}/return',
+        [AssetAssignmentController::class, 'returnAsset']
+    );
+
+
     //Asset Code
     Route::apiResource('asset-codes', AssetCodeController::class);
 
     //License
-    Route::get('/assetmaster/license/{asset_id}', [LicenseController::class, 'index']);
+    Route::get('/licenses', [LicenseController::class, 'index']);
+    // Route::get('/assetmaster/license/{asset_id}', [LicenseController::class, 'index']);
     Route::post('/assetmaster/license/create', [LicenseController::class, 'store']);
     // Route::get('/assetmaster/assetmaster/assetmaster/license/view/{id}', [LicenseController::class, 'show']);
     // Route::put('/assetmaster/assetmaster/license/update/{id}', [LicenseController::class, 'update']);
@@ -164,10 +190,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/assetmaster/file/view/{id}', [FileController::class, 'show']);
     Route::delete('/assetmaster/file/delete/{id}', [FileController::class, 'destroy']);
 
-    Route::prefix('assetmaster/maintenance')->group(function () {
-        Route::get('/{asset_id}', [MaintenanceController::class, 'getByAsset']);
-        Route::post('/create', [MaintenanceController::class, 'store']);
-        Route::delete('/delete/{id}', [MaintenanceController::class, 'destroy']);
+    // Maintenance Routes - RESTful
+    Route::prefix('maintenance')->group(function () {
+        Route::get('/', [MaintenanceController::class, 'index']);
+        Route::get('/statistics', [MaintenanceController::class, 'statistics']);
+        Route::get('/upcoming', [MaintenanceController::class, 'upcoming']);
+        Route::get('/asset/{asset_id}', [MaintenanceController::class, 'getByAsset']);
+        Route::get('/{id}', [MaintenanceController::class, 'show']);
+        Route::post('/', [MaintenanceController::class, 'store']);
+        Route::put('/{id}', [MaintenanceController::class, 'update']);
+        Route::patch('/{id}', [MaintenanceController::class, 'update']);
+        Route::delete('/{id}', [MaintenanceController::class, 'destroy']);
+        Route::post('/bulk-delete', [MaintenanceController::class, 'bulkDelete']);
     });
 
     //Histories
@@ -251,6 +285,23 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //COuntries
     Route::get('/countries', [CountryController::class, 'index']);
+
+    //AI
+    Route::post('/ai-assistant/ask', [AssetAICopilotController::class, 'askGroq']);
+    Route::post('/ai-assistant/ask/gemini', [AssetAICopilotController::class, 'askGemini']);
+    Route::get('/ai-assistant/dashboard', [AssetAICopilotController::class, 'dashboard']);
+
+    Route::get('/work-orders', [WorkOrderController::class, 'index']);
+    Route::post('/work-orders', [WorkOrderController::class, 'store']);
+
+    // Route::get('/preventive-maintenance-schedules', [PreventiveMaintenanceController::class, 'index']);
+    // Route::post('/preventive-maintenance-schedules', [PreventiveMaintenanceController::class, 'store']);
+
+    // Route::get('/spare-parts', [SparePartController::class, 'index']);
+    // Route::post('/spare-parts', [SparePartController::class, 'store']);
+
+    // Route::get('/compliance-requirements', [ComplianceRequirementController::class, 'index']);
+    // Route::post('/compliance-requirements', [ComplianceRequirementController::class, 'store']);
 });
 
 Route::post('/public/quotations/{public_token}', [QuotationController::class, 'store']);
