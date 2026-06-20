@@ -60,7 +60,7 @@ class UserTableSeeder extends Seeder
             ['username' => 'Demo'],
             [
                 'tenant_id'         => 2, // example tenant/company
-                'name'              => 'Demo Company',
+                'name'              => 'Acme Corp',
                 'email'             => 'admin@company.com',
                 'email_verified_at' => $now,
                 'password'          => Hash::make('Company123!'),
