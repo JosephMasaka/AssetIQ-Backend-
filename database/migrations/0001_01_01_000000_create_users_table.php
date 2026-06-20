@@ -41,6 +41,8 @@ return new class extends Migration
             $table->string('job_title')->nullable()->comment('Job Title (SAP: STELL)');
             $table->string('department')->nullable()->comment('Department (SAP: DEPT)');
 
+            $table->unsignedBigInteger('requested_plan')->nullable();
+
             // Audit Fields (SAP style: ERDAT, ERNAM, AEDAT, AENAM)
             $table->unsignedBigInteger('created_by')->nullable()->comment('ERNAM - Created By');
             $table->unsignedBigInteger('updated_by')->nullable()->comment('AENAM - Last Changed By');
