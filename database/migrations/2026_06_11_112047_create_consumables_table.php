@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
 
             // ── Ownership ────────────────────────────────────────────────────
-            $table->foreignId('company_id')->constrained('companies')->cascadeOnDelete();
+            $table->foreignId('company_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('asset_id')->nullable()->constrained('assets')->nullOnDelete();
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
