@@ -50,4 +50,13 @@ class User extends Authenticatable
         if (!$this->plan) return false;
         return $this->plan->modules()->where('key', $key)->exists();
     }
+
+    public function licenses()
+    {
+        return $this->morphToMany(
+            License::class,
+            'assignable',
+            'license_assignments'
+        );
+    }
 }

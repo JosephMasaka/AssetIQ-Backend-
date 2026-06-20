@@ -137,4 +137,24 @@ class UserController extends Controller
 
         return response()->json(['message' => 'Password reset']);
     }
+
+    public function employees()
+    {
+        $user = auth('api')->user();
+        if (!$user) return $this->errorResponse('Unauthenticated', 401);
+
+        $canManage = $user->roles()->whereHas('permissions', function ($q) {
+            $q->where('name', 'user:manage');
+        })->exists();
+
+        if (!$canManage) {
+            return $this->errorResponse('Permission Denied', 403);
+        }
+
+        $users = User::where('created_by', $user->getCompany())->where('is_active', 1)->get();
+
+        return response()->json([
+            'data' => $users
+        ]);
+    }
 }
