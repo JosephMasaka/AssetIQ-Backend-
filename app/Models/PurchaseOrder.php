@@ -16,9 +16,19 @@ class PurchaseOrder extends Model
         'order_date',
         'status',
         'currency',
+        'total_amount',
+        'approval_request_id',
+        'approval_status',
+        'budget_id',
+        'cost_center_id',
         'created_by',
         'updated_by',
         'company_id',
+    ];
+
+    protected $casts = [
+        'order_date' => 'date',
+        'total_amount' => 'decimal:2',
     ];
 
     public function items()
@@ -34,5 +44,35 @@ class PurchaseOrder extends Model
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function requisition()
+    {
+        return $this->belongsTo(Requisition::class);
+    }
+
+    public function approvalRequest()
+    {
+        return $this->belongsTo(ApprovalRequest::class, 'approval_request_id');
+    }
+
+    public function budget()
+    {
+        return $this->belongsTo(Budget::class);
+    }
+
+    public function costCenter()
+    {
+        return $this->belongsTo(CostCenter::class);
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class, 'po_id');
+    }
+
+    public function goodsReceipts()
+    {
+        return $this->hasMany(GoodsReceipt::class, 'po_id');
     }
 }

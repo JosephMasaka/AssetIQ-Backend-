@@ -19,6 +19,10 @@ class Requisition extends Model
         'status',
         'justification',
         'capex_request_id',
+        'approval_request_id',
+        'approval_status',
+        'budget_id',
+        'cost_center_id',
         'company_id',
         'created_by',
         'changed_by'
@@ -51,4 +55,18 @@ class Requisition extends Model
             ->withTimestamps();
     }
 
+    public function approvalRequest()
+    {
+        return $this->belongsTo(ApprovalRequest::class, 'approval_request_id');
+    }
+
+    public function budget()
+    {
+        return $this->belongsTo(Budget::class);
+    }
+
+    public function costCenter()
+    {
+        return $this->belongsTo(CostCenter::class);
+    }
 }

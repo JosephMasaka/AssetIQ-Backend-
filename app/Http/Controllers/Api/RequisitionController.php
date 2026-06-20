@@ -21,7 +21,7 @@ class RequisitionController extends Controller
      */
     public function index()
     {
-        $user = auth('api')->user();
+        $user = auth()->user();
 
         if (!$user) {
             return $this->errorResponse('Unauthenticated', 401);
@@ -54,7 +54,7 @@ class RequisitionController extends Controller
      */
     public function show($id)
     {
-        $user = auth('api')->user();
+        $user = auth()->user();
 
         if (!$user) {
             return $this->errorResponse('Unauthenticated', 401);
@@ -90,7 +90,7 @@ class RequisitionController extends Controller
      */
     public function store(Request $request)
     {
-        $user = auth('api')->user();
+        $user = auth()->user();
 
         if (!$user) {
             return $this->errorResponse('Unauthenticated', 401);
@@ -148,7 +148,7 @@ class RequisitionController extends Controller
 
     public function addVendors(Request $request)
     {
-        $user = auth('api')->user();
+        $user = auth()->user();
 
         if (!$user) {
             return $this->errorResponse('Unauthenticated', 401);
@@ -311,7 +311,7 @@ class RequisitionController extends Controller
 
     public function getRequisitionItems($id)
     {
-        $user = auth('api')->user();
+        $user = auth()->user();
 
         if (!$user) {
             return $this->errorResponse('Unauthenticated', 401);
@@ -346,7 +346,7 @@ class RequisitionController extends Controller
 
     public function generateRFQLinks($id, $vendorId)
     {
-        $user = auth('api')->user();
+        $user = auth()->user();
         if (!$user) {
             return $this->errorResponse('Unauthenticated', 401);
         }

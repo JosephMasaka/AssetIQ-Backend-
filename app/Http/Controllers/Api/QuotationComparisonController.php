@@ -18,7 +18,7 @@ class QuotationComparisonController extends Controller
 
     public function compare(Request $request, $requisitionId)
     {
-        $user = auth('api')->user();
+        $user = auth()->user();
 
         if (!$user) {
             return $this->errorResponse('Unauthenticated', 401);
