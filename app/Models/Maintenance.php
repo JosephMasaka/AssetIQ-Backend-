@@ -22,8 +22,23 @@ class Maintenance extends Model
         'created_by',
     ];
 
+    protected $casts = [
+        'maintenance_date' => 'date',
+        'cost' => 'decimal:2',
+    ];
+
     public function asset()
     {
         return $this->belongsTo(Asset::class);
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
     }
 }
