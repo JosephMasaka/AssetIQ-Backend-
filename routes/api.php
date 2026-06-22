@@ -171,6 +171,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //License
     Route::get('/licenses', [LicenseController::class, 'index']);
+    Route::post('/license/create', [LicenseController::class, 'store']);
     // Route::get('/assetmaster/license/{asset_id}', [LicenseController::class, 'index']);
     Route::post('/assetmaster/license/create', [LicenseController::class, 'store']);
     // Route::get('/assetmaster/assetmaster/assetmaster/license/view/{id}', [LicenseController::class, 'show']);
