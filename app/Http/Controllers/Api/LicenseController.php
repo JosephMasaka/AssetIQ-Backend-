@@ -26,6 +26,7 @@ class LicenseController extends Controller
         $licenses = License::withCount([
             'assignments'
         ])
+        ->with('vendor')
         ->latest()
         ->get();
 
@@ -44,7 +45,7 @@ class LicenseController extends Controller
         }
 
         $canManage = $user->roles()->whereHas('permissions', function ($q) {
-            $q->where('name', 'asset:manage');
+            $q->where('name', 'licenses:manage');
         })->exists();
 
         if (!$canManage) {

@@ -59,6 +59,14 @@ class License extends Model
         );
     }
 
+    public function vendor()
+    {
+        return $this->hasOne(
+            License::class,
+            'vendor_id',
+        );
+    }
+
     public function users()
     {
         return $this->morphedByMany(
