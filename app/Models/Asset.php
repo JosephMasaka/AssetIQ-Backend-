@@ -144,5 +144,13 @@ class Asset extends Model
     {
         return $this->hasOne(AssetValuation::class)->latestOfMany('valuation_date');
     }
+
+    public function licenseAssignments()
+    {
+        return $this->morphMany(
+            LicenseAssignment::class,
+            'assignable'
+        );
+    }
 }
 

@@ -90,12 +90,6 @@ class RolePermissionSeeder extends Seeder
             'license:update',
             'license:delete',
 
-            // Maintenance
-            'maintenance:manage',
-            'maintenance:create',
-            'maintenance:update',
-            'maintenance:delete',
-
             // Components
             'components:manage',
             'components:create',
@@ -299,7 +293,14 @@ class RolePermissionSeeder extends Seeder
             'account groups:delete',
 
             //////////////////////////////////////////////////////////////////////////////
-            //Maintenance
+           //Maintenance & Work Orders
+            'maintenance and work orders:manage',
+            
+            'maintenance:manage',
+            'maintenance:create',
+            'maintenance:update',
+            'maintenance:delete',
+
             // Work Orders
             'work order:manage',
             'work order:create',
@@ -548,12 +549,6 @@ class RolePermissionSeeder extends Seeder
             'license:update',
             'license:delete',
 
-            // Maintenance
-            'maintenance:manage',
-            'maintenance:create',
-            'maintenance:update',
-            'maintenance:delete',
-
             // Components
             'components:manage',
             'components:create',
@@ -723,7 +718,15 @@ class RolePermissionSeeder extends Seeder
             'compliance:delete',
 
             //////////////////////////////////////////////////////////////////////////////
-            //Maintenance
+            //Maintenance & Work Orders
+            'maintenance and work orders:manage',
+
+            // Maintenance
+            'maintenance:manage',
+            'maintenance:create',
+            'maintenance:update',
+            'maintenance:delete',
+
             // Work Orders
             'work order:manage',
             'work order:create',

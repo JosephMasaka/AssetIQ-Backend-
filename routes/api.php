@@ -39,6 +39,8 @@ use App\Http\Controllers\Api\ModuleController;
 use App\Http\Controllers\Api\AssetAssignmentController;
 use App\Http\Controllers\Api\AssetAICopilotController;
 use App\Http\Controllers\Api\WorkOrderController;
+use App\Http\Controllers\Api\ComponentCategoryController;
+use App\Http\Controllers\Api\ComponentInstallationController;
 // use App\Http\Controllers\Api\PreventiveMaintenanceController;
 // use App\Http\Controllers\Api\SparePartController;
 // use App\Http\Controllers\Api\ComplianceRequirementController;
@@ -149,6 +151,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/assetmaster/attribute/create', [AssetAttributeController::class, 'store']);
     Route::get('/assetmaster/attribute/{id}', [AssetAttributeController::class, 'show']);
 
+    //Asset Consumables
+    Route::get('/consumables', [ConsumableController::class, 'index']);
+    Route::post('/consumable/create', [ConsumableController::class, 'store']);
+    Route::get('/assetmaster/attribute/{id}', [ConsumableController::class, 'show']);
+
     //Asset Assigments
     Route::get(
         '/assets/{asset}/assignments',
@@ -178,12 +185,53 @@ Route::middleware('auth:sanctum')->group(function () {
     // Route::put('/assetmaster/assetmaster/license/update/{id}', [LicenseController::class, 'update']);
     // Route::delete('/assetmaster/license/delete/{id}', [LicenseController::class, 'destroy']);
 
-    //Components
-    Route::get('/assetmaster/component/{asset_id}', [ComponentController::class, 'index']);
-    Route::post('/assetmaster/component/create', [ComponentController::class, 'store']);
-    // Route::get('/assetmaster/assetmaster/assetmaster/license/view/{id}', [LicenseController::class, 'show']);
-    // Route::put('/assetmaster/assetmaster/license/update/{id}', [LicenseController::class, 'update']);
-    // Route::delete('/assetmaster/license/delete/{id}', [LicenseController::class, 'destroy']);
+    Route::get(
+        '/asset/{asset}/license-assignments',
+        [LicenseAssignmentController::class, 'index']
+    );
+    Route::post(
+        '/license-assignment/create',
+        [LicenseAssignmentController::class, 'store']
+    );
+    Route::put(
+        '/license-assignment/revoke/{id}',
+        [LicenseAssignmentController::class, 'revoke']
+    );
+    Route::delete(
+        '/license-assignment/delete/{id}',
+        [LicenseAssignmentController::class, 'destroy']
+    );
+
+    //Component Categories
+    Route::get('/component-categories', [ComponentCategoryController::class, 'index']);
+    Route::get('/component-categories/{componentCategory}', [ComponentCategoryController::class, 'show']);
+    Route::post('/component-categories', [ComponentCategoryController::class, 'store']);
+    Route::put('/component-categories/{componentCategory}', [ComponentCategoryController::class, 'update']);
+    Route::patch('/component-categories/{componentCategory}', [ComponentCategoryController::class, 'update']);
+    Route::delete('/component-categories/{componentCategory}', [ComponentCategoryController::class, 'destroy']);
+
+    //Components - CRUD
+    Route::get('/components', [ComponentController::class, 'index']);
+    Route::get('/components/{id}', [ComponentController::class, 'show']);
+    Route::post('/components', [ComponentController::class, 'store']);
+    Route::put('/components/{id}', [ComponentController::class, 'update']);
+    Route::patch('/components/{id}', [ComponentController::class, 'update']);
+    Route::delete('/components/{id}', [ComponentController::class, 'destroy']);
+
+    //Component Actions - Lifecycle
+    Route::post('/components/{id}/install', [ComponentController::class, 'install']);
+    Route::post('/components/{id}/remove', [ComponentController::class, 'remove']);
+    Route::post('/components/{id}/return-from-repair', [ComponentController::class, 'returnFromRepair']);
+    Route::post('/components/{id}/retire', [ComponentController::class, 'retire']);
+
+    //Component - Asset Relationship
+    Route::get('/assets/{assetId}/components', [ComponentController::class, 'getByAsset']);
+
+    //Component Installations - History
+    Route::get('/component-installations', [ComponentInstallationController::class, 'index']);
+    Route::get('/component-installations/{componentInstallation}', [ComponentInstallationController::class, 'show']);
+    Route::get('/components/{component}/installations', [ComponentInstallationController::class, 'forComponent']);
+    Route::get('/assets/{asset}/component-installations', [ComponentInstallationController::class, 'forAsset']);
 
     //Files
     Route::get('/assetmaster/file/{asset_id}', [FileController::class, 'index']);

@@ -30,6 +30,8 @@ class DashboardVisibility
         if ($can('procurement:manage')) $tabs[] = 'procurement';
         if ($can('asset:manage'))       $tabs[] = 'assets';
         if ($can('finance:manage'))     $tabs[] = 'finance';
+        if ($can('maintenance and work orders:manage'))     $tabs[] = 'maintenance';
+        if ($can('report:manage'))     $tabs[] = 'reports';
 
         return $tabs;
     }
